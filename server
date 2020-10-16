@@ -7,6 +7,7 @@ gemfile do
   source 'https://rubygems.org'
   gem 'sinatra', require: false
   gem 'sinatra-contrib'
+  gem 'pry'
 end
 
 require 'sinatra'
@@ -17,7 +18,7 @@ set :port, 3000
 boards = {}
 cards = []
 100.times do |i|
-  cards << { board: 'here', username: "user #{i}", column: ["start", "stop", "continue"].sample, message: "Message is here #{i}" }
+  cards << { id: 'here', board: 'here', username: "user #{i}", column: ["start", "stop", "continue"].sample, message: "Message is here #{i}", votes: 0 }
 end
 
 def board_cards(board, cards)
@@ -30,6 +31,7 @@ end
 
 post '/username' do
   cookies[:username] = params[:username]
+  cookies[:rem_votes] = 3
   redirect "/boards/#{params[:board]}"
 end
 
@@ -51,6 +53,7 @@ post '/boards' do
   board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
 
   boards[id] = board
+  cookies[:rem_votes] = 3
   redirect "/boards/#{id}"
 end
 
@@ -63,8 +66,24 @@ end
 
 post '/boards/:board/cards' do
   board = boards[params[:board]]
+  card_id = SecureRandom.uuid
   redirect '/' unless board
 
-  cards << params.slice(:board, :column, :message).merge(username: cookies[:username])
+  card = params.slice(:board, :column, :message).merge(username: cookies[:username]).merge(votes: 0).merge(id: card_id)
+  card = JSON.parse(card.to_json, symbolize_names: true)
+  cards << card
+
+  redirect "/boards/#{params[:board]}"
+end
+
+get '/boards/:board/cards/:card/up_vote' do
+  board = params[:board]
+  card_id = params[:card]
+  card_index = cards.find_index{|card| card[:id] == card_id }
+  redirect '/' unless card_id
+  redirect "/boards/#{params[:board]}" if cookies[:rem_votes].to_i == 0
+  cards[card_index][:votes] += 1
+  cookies[:rem_votes] = cookies[:rem_votes].to_i - 1
+
   redirect "/boards/#{params[:board]}"
 end
