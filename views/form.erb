@@ -1,0 +1,29 @@
+<form action="/boards/<%= board[:id] %>/cards" method="POST">
+
+  <div class="field">
+    <label class="label" for="column">Column</label>
+    <div class="control">
+      <div class="select is-fullwidth">
+        <select name="column" id="column">
+          <% board[:columns].each do |column| %>
+            <option value="<%=h column %>"><%=h column %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label" for="message">Message</label>
+    <div class="control">
+      <textarea class="textarea" placeholder="What's in your mind?..." name="message" id="message"></textarea>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="control">
+      <button class="button is-link" type="submit">Send</button>
+    </div>
+  </div>
+
+</form>

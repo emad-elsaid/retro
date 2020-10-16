@@ -1,0 +1,70 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/inline'
+
+gemfile do
+  source 'https://rubygems.org'
+  gem 'sinatra', require: false
+  gem 'sinatra-contrib'
+end
+
+require 'sinatra'
+require_relative 'helpers'
+
+set :port, 3000
+
+boards = {}
+cards = []
+100.times do |i|
+  cards << { board: 'here', username: "user #{i}", column: ["start", "stop", "continue"].sample, message: "Message is here #{i}" }
+end
+
+def board_cards(board, cards)
+  cards.select { |c| c[:board] == board }
+end
+
+get '/' do
+  erb :index
+end
+
+post '/username' do
+  cookies[:username] = params[:username]
+  redirect "/boards/#{params[:board]}"
+end
+
+get '/boards/:board' do
+  board = boards[params[:board]]
+  redirect '/' unless board
+
+  if cookies[:username]
+    erb :board, locals: { board: boards[params[:board]] }
+  else
+    erb :username, locals: { board: boards[params[:board]] }
+  end
+end
+
+post '/boards' do
+  id = SecureRandom.uuid
+
+  board = params.slice(:name, :columns).merge(id: id)
+  board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
+
+  boards[id] = board
+  redirect "/boards/#{id}"
+end
+
+get '/boards/:board/cards' do
+  board = boards[params[:board]]
+  redirect '/' unless board
+
+  erb :cards, locals: { board: boards[params[:board]], cards: board_cards(params[:board], cards) }
+end
+
+post '/boards/:board/cards' do
+  board = boards[params[:board]]
+  redirect '/' unless board
+
+  cards << params.slice(:board, :column, :message).merge(username: cookies[:username])
+  redirect "/boards/#{params[:board]}"
+end
