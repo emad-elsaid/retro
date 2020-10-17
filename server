@@ -16,32 +16,28 @@ set :port, 3000
 
 boards = {}
 cards = []
-100.times do |i|
-  cards << { board: 'here', username: "user #{i}", column: ["start", "stop", "continue"].sample, message: "Message is here #{i}" }
-end
-
-def board_cards(board, cards)
-  cards.select { |c| c[:board] == board }
-end
 
 get '/' do
   erb :index
 end
 
+get '/username' do
+  erb :username, locals: { back: request.referer }
+end
+
 post '/username' do
   cookies[:username] = params[:username]
-  redirect "/boards/#{params[:board]}"
+  cookies[:userid] = SecureRandom.uuid unless cookies.key?(:userid)
+  redirect params[:back]
 end
 
 get '/boards/:board' do
+  redirect '/username' unless cookies[:userid]
+
   board = boards[params[:board]]
   redirect '/' unless board
 
-  if cookies[:username]
-    erb :board, locals: { board: boards[params[:board]] }
-  else
-    erb :username, locals: { board: boards[params[:board]] }
-  end
+  erb :board, locals: { board: boards[params[:board]] }
 end
 
 post '/boards' do
