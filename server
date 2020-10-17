@@ -17,12 +17,16 @@ set :port, 3000
 
 boards = {}
 cards = []
-100.times do |i|
-  cards << { id: 'here', board: 'here', username: "user #{i}", column: ["start", "stop", "continue"].sample, message: "Message is here #{i}", votes: 0 }
-end
 
 def board_cards(board, cards)
   cards.select { |c| c[:board] == board }
+end
+
+def assign_user_to_board(board, user)
+  return unless board[:users][user].nil?
+
+  board[:users][user] = {}
+  board[:users][user][:votes] = 0
 end
 
 get '/' do
@@ -31,7 +35,7 @@ end
 
 post '/username' do
   cookies[:username] = params[:username]
-  cookies[:rem_votes] = 3
+  assign_user_to_board(boards[params[:board]], cookies[:username])
   redirect "/boards/#{params[:board]}"
 end
 
@@ -40,6 +44,7 @@ get '/boards/:board' do
   redirect '/' unless board
 
   if cookies[:username]
+    assign_user_to_board(board, cookies[:username])
     erb :board, locals: { board: boards[params[:board]] }
   else
     erb :username, locals: { board: boards[params[:board]] }
@@ -51,9 +56,10 @@ post '/boards' do
 
   board = params.slice(:name, :columns).merge(id: id)
   board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
+  board[:users] = {}
+  board[:allowed_votes] = params[:allowed_votes].to_i
 
   boards[id] = board
-  cookies[:rem_votes] = 3
   redirect "/boards/#{id}"
 end
 
@@ -79,11 +85,15 @@ end
 get '/boards/:board/cards/:card/up_vote' do
   board = params[:board]
   card_id = params[:card]
-  card_index = cards.find_index{|card| card[:id] == card_id }
+  redirect '/' unless board
   redirect '/' unless card_id
-  redirect "/boards/#{params[:board]}" if cookies[:rem_votes].to_i == 0
-  cards[card_index][:votes] += 1
-  cookies[:rem_votes] = cookies[:rem_votes].to_i - 1
+
+  user_votes = boards[board][:users][cookies[:username]][:votes].to_i
+  redirect "/boards/#{params[:board]}" if user_votes >= boards[board][:allowed_votes].to_i
+
+  voted_card = cards.find{|card| card[:id] == card_id }
+  voted_card[:votes] += 1
+  boards[board][:users][cookies[:username]][:votes] += 1
 
   redirect "/boards/#{params[:board]}"
 end
