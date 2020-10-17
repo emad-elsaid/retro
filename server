@@ -61,6 +61,9 @@ post '/boards/:board/cards' do
   board = boards[params[:board]]
   redirect '/' unless board
 
-  cards << params.slice(:board, :column, :message).merge(username: cookies[:username])
+  cards << params
+           .slice(:board, :column, :message)
+           .merge(id: SecureRandom.uuid, username: cookies[:username], userid: cookies[:userid])
+
   redirect "/boards/#{params[:board]}"
 end
