@@ -1,10 +1,18 @@
 <div class="card mb-3">
   <div class="card-content">
     <div class="content">
-      <p>
-        <%=h card[:message] %>
-        <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
-      </p>
+      <%=h card[:message] %>
+      <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
     </div>
+
+    <% if card[:userid] == userid  %>
+      <div class="content">
+        <form method="post" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>">
+          <input type="hidden" name="_method" value="DELETE" />
+          <button type="submit" class="button is-danger is-small is-rounded">Delete</button>
+        </form>
+      </div>
+    <% end %>
+
   </div>
 </div>

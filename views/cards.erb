@@ -6,7 +6,7 @@
 
         <h1 class="subtitle"><%=h column %></h1>
         <% cards.filter { |card| card[:column] == column }.each do |card| %>
-          <%= erb :card, locals: { card: card } %>
+          <%= erb :card, locals: { card: card, board: board, userid: userid } %>
         <% end %>
 
       </div>

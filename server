@@ -54,7 +54,11 @@ get '/boards/:board/cards' do
   board = boards[params[:board]]
   redirect '/' unless board
 
-  erb :cards, locals: { board: boards[params[:board]], cards: board_cards(params[:board], cards) }
+  erb :cards, locals: {
+    board: boards[params[:board]],
+    cards: board_cards(params[:board], cards),
+    userid: cookies[:userid]
+  }
 end
 
 post '/boards/:board/cards' do
@@ -66,4 +70,10 @@ post '/boards/:board/cards' do
            .merge(id: SecureRandom.uuid, username: cookies[:username], userid: cookies[:userid])
 
   redirect "/boards/#{params[:board]}"
+end
+
+delete '/boards/:board/cards/:card' do
+  cards.delete_if { |c| c[:id] == params[:card] && c[:userid] == cookies[:userid] }
+
+  redirect "/boards/#{params[:board]}/cards"
 end
