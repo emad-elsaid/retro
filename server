@@ -71,12 +71,9 @@ end
 
 post '/boards/:board/cards' do
   board = boards[params[:board]]
-  card_id = SecureRandom.uuid
   redirect '/' unless board
 
-  card = params.slice(:board, :column, :message).merge(username: cookies[:username]).merge(votes: 0).merge(id: card_id)
-  card = JSON.parse(card.to_json, symbolize_names: true)
-  cards << card
+  cards << params.slice(:board, :column, :message).merge(username: cookies[:username], votes: 0, id: SecureRandom.uuid)
 
   redirect "/boards/#{params[:board]}"
 end
