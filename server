@@ -7,7 +7,6 @@ gemfile do
   source 'https://rubygems.org'
   gem 'sinatra', require: false
   gem 'sinatra-contrib'
-  gem 'pry'
 end
 
 require 'sinatra'
