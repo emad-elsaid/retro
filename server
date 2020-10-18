@@ -13,6 +13,7 @@ require 'sinatra'
 require_relative 'helpers'
 
 set :port, 3000
+set :bind, '0.0.0.0'
 
 boards = {}
 cards = []

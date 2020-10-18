@@ -24,7 +24,12 @@ Run the server script, it'll install the needed dependencies
 ```
 ./server
 ```
+Usuing Docker 
 
+```
+docker build -t retro .
+docker run -d -p 3000:3000 retro
++```
 ## Guidelines
 
 - No login needed
