@@ -17,10 +17,6 @@ set :port, 3000
 boards = {}
 cards = []
 
-def board_cards(board, cards)
-  cards.select { |c| c[:board] == board }
-end
-
 def assign_user_to_board(board, user)
   return unless board[:users][user].nil?
 
@@ -32,22 +28,25 @@ get '/' do
   erb :index
 end
 
+get '/username' do
+  erb :username, locals: { back: request.referer }
+end
+
 post '/username' do
   cookies[:username] = params[:username]
+  cookies[:userid] = SecureRandom.uuid unless cookies.key?(:userid)
   assign_user_to_board(boards[params[:board]], cookies[:username])
-  redirect "/boards/#{params[:board]}"
+  redirect params[:back]
 end
 
 get '/boards/:board' do
+  redirect '/username' unless cookies[:userid]
+
   board = boards[params[:board]]
   redirect '/' unless board
 
-  if cookies[:username]
-    assign_user_to_board(board, cookies[:username])
-    erb :board, locals: { board: boards[params[:board]] }
-  else
-    erb :username, locals: { board: boards[params[:board]] }
-  end
+  assign_user_to_board(board, cookies[:username])
+  erb :board, locals: { board: boards[params[:board]] }
 end
 
 post '/boards' do
@@ -66,14 +65,20 @@ get '/boards/:board/cards' do
   board = boards[params[:board]]
   redirect '/' unless board
 
-  erb :cards, locals: { board: boards[params[:board]], cards: board_cards(params[:board], cards) }
+  erb :cards, locals: {
+    board: boards[params[:board]],
+    cards: board_cards(params[:board], cards),
+    userid: cookies[:userid]
+  }
 end
 
 post '/boards/:board/cards' do
   board = boards[params[:board]]
   redirect '/' unless board
 
-  cards << params.slice(:board, :column, :message).merge(username: cookies[:username], votes: 0, id: SecureRandom.uuid)
+  cards << params
+           .slice(:board, :column, :message)
+           .merge(id: SecureRandom.uuid, username: cookies[:username], userid: cookies[:userid], votes: 0)
 
   redirect "/boards/#{params[:board]}"
 end
@@ -92,4 +97,10 @@ get '/boards/:board/cards/:card/up_vote' do
   boards[board][:users][cookies[:username]][:votes] += 1
 
   redirect "/boards/#{params[:board]}"
+end
+
+delete '/boards/:board/cards/:card' do
+  cards.delete_if { |c| c[:id] == params[:card] && c[:userid] == cookies[:userid] }
+
+  redirect "/boards/#{params[:board]}/cards"
 end

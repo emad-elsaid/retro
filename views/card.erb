@@ -1,16 +1,24 @@
 <div class="card mb-3">
   <div class="card-content">
     <div class="content">
-      <p>
-        <%=h card[:message] %>
-        <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
-        <a href=<%= "/boards/#{card[:board]}/cards/#{card[:id]}/up_vote"%> target="_top">
-          <span class="icon has-text-info">
-            <i class="fas fa-thumbs-up"></i>
-          </span>
-        </a>
-        <small class="has-text-info"><%=h card[:votes] %></small>
-      </p>
+      <%=h card[:message] %>
+      <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
+      <a href=<%= "/boards/#{card[:board]}/cards/#{card[:id]}/up_vote"%> target="_top">
+        <span class="icon has-text-info">
+          <i class="fas fa-thumbs-up"></i>
+        </span>
+      </a>
+      <small class="has-text-info"><%=h card[:votes] %></small>
     </div>
+
+    <% if card[:userid] == userid  %>
+      <div class="content">
+        <form method="post" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>">
+          <input type="hidden" name="_method" value="DELETE" />
+          <button type="submit" class="button is-danger is-small is-rounded">Delete</button>
+        </form>
+      </div>
+    <% end %>
+
   </div>
 </div>

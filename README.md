@@ -14,6 +14,12 @@ cards to it.
   the server redirect him to set his username
 - The board has a form to create a new card
 
+## Running the server
+
+Run the server script, it'll install the needed dependencies
+```
+./server
+```
 
 ## Guidelines
 
