@@ -22,6 +22,7 @@ cards to it.
 
 Run the server script, it'll install the needed dependencies
 ```
+bundle install
 ./server
 ```
 
