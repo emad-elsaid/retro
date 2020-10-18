@@ -12,10 +12,11 @@ cards to it.
 - A ruby server with Sinatra
 - CSS with Bulma
 - Saves all data in memory
-- Users give the boards name and list of columns and server assignes UUID to it
-- When a user opens a board link if he doesn't have cookies with username in it
-  the server redirect him to set his username
-- The board has a form to create a new card
+- User can create board with name, max votes per user, columns names
+- When the server needs the user to have identity it'll redirect him to set his username and assign uuid
+- The board has a form to create a new card in each column
+- Users can edit and delete boards
+- Users can vote on cards
 
 ## Running the server
 
