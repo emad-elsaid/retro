@@ -32,6 +32,13 @@ Using Docker
 docker build -t retro .
 docker run -d -p 3000:3000 retro
 ```
+ K8s and K3s deployment using helm
+
+```
+cd helmcharts/retro-app
+Add your setting values in  values.yaml such as image repository, enable ingress and replica etc
+helm install retro -n {Your name space} .
+```
 
 ## Guidelines
 
