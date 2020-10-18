@@ -16,15 +16,15 @@
             <div class="card-content">
 
               <div class="content">
-                <%=h card[:message] %>
-                <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
-
                 <% if card[:votes].count > 0 %>
+                  <%=h card[:votes].count %>
                   <span class="icon">
                     <i class="fas fa-thumbs-up"></i>
                   </span>
-                  <%=h card[:votes].count %>
                 <% end %>
+
+                <%=h card[:message] %>
+                <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
               </div>
 
               <div class="content">
@@ -51,9 +51,9 @@
                 <% end %>
 
                 <% if card[:userid] == userid  %>
-                  <form method="post" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>">
+                  <form class="is-inline" method="post" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>">
                     <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit" class="button is-danger is-small is-rounded">
+                    <button type="submit" class="button is-danger is-outlined">
                       <span>Delete</span>
                       <span class="icon">
                         <i class="fas fa-times"></i>
