@@ -1,7 +1,8 @@
 <% votes = remaining_votes(board, cards, userid) %>
 
 <section class="section">
-  <h1 class="title"><%=h board[:name] %></h1>
+  <h1 class="title is-3"><%=h board[:name] %></h1>
+
   <p class="content">
     Export:
     <a href="/boards/<%= board[:id] %>/export/markdown">Markdown</a>
@@ -11,7 +12,7 @@
   <div class="columns">
     <% board[:columns].each do |column| %>
       <div class="column">
-        <h1 class="subtitle"><%=h column %></h1>
+        <h2 class="title is-5"><%=h column %></h2>
 
         <% cards.filter { |card| card[:column] == column }.each do |card| %>
           <div class="card">
