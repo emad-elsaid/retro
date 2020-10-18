@@ -10,4 +10,8 @@ helpers do
   def board_cards(board, cards)
     cards.select { |c| c[:board] == board }
   end
+
+  def votes_count(cards, userid)
+    cards.map { |c| c[:votes] }.flatten.count { |v| v == userid }
+  end
 end
