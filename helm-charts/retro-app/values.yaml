@@ -48,7 +48,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: retro.mohammedragab.com
-      paths: []
+      paths: ["/"]
   tls: 
      - secretName: tls-cert
        hosts:
