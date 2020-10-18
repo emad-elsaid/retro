@@ -26,6 +26,13 @@ bundle install
 ./server
 ```
 
+Using Docker 
+
+```
+docker build -t retro .
+docker run -d -p 3000:3000 retro
+```
+
 ## Guidelines
 
 - No login needed
