@@ -1,0 +1,13 @@
+<%= board[:name] %>
+
+====================
+
+<% board[:columns].each do |column| %>
+
+## <%= column %>
+
+<% cards.select { |card| card[:column] == column }.each do |card| %>
+* <%=h card[:username] %>: <%=h card[:message] %>
+<% end %>
+
+<% end %>
