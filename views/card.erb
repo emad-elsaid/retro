@@ -3,6 +3,12 @@
     <div class="content">
       <%=h card[:message] %>
       <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
+      <a href=<%= "/boards/#{card[:board]}/cards/#{card[:id]}/up_vote"%> target="_top">
+        <span class="icon has-text-info">
+          <i class="fas fa-thumbs-up"></i>
+        </span>
+      </a>
+      <small class="has-text-info"><%=h card[:votes] %></small>
     </div>
 
     <% if card[:userid] == userid  %>
