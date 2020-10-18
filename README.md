@@ -4,6 +4,9 @@ Retro
 A ruby HTTP server that allows users to create retrospective boards, and add
 cards to it.
 
+![Screenshot-2020-10-18_19-50-27](https://user-images.githubusercontent.com/54403/96375767-4028d700-117b-11eb-9794-e803118306bd.png)
+
+
 ## How it works
 
 - A ruby server with Sinatra
