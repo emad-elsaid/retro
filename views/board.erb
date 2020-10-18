@@ -1,7 +1,9 @@
+<% votes = remaining_votes(board, cards, userid) %>
+
 <section class="section">
   <h1 class="title"><%=h board[:name] %></h1>
   <p class="content">
-    <small class="has-text-grey-light"><%= remaining_votes(board, cards, userid) %> Remaining votes for you.</small>
+    <small class="has-text-grey-light"><%= votes %> Remaining votes for you.</small>
   </p>
 
   <div class="columns">
@@ -10,10 +12,77 @@
         <h1 class="subtitle"><%=h column %></h1>
 
         <% cards.filter { |card| card[:column] == column }.each do |card| %>
-          <%= erb :card, locals: { card: card, board: board, cards: cards, userid: userid } %>
+          <div class="card">
+            <div class="card-content">
+
+              <div class="content">
+                <%=h card[:message] %>
+                <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
+
+                <% if card[:votes].count > 0 %>
+                  <span class="icon">
+                    <i class="fas fa-thumbs-up"></i>
+                  </span>
+                  <%=h card[:votes].count %>
+                <% end %>
+              </div>
+
+              <div class="content">
+
+                <% if votes > 0 %>
+                  <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>/vote">
+                    <button type="submit" class="button is-success is-outlined">
+                      <span class="icon">
+                        <i class="fas fa-thumbs-up"></i>
+                      </span>
+                    </button>
+                  </form>
+                <% end %>
+
+                <% if card[:votes].include?(userid) %>
+                  <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>/vote">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button type="submit" class="button is-danger is-outlined">
+                      <span class="icon">
+                        <i class="fas fa-thumbs-down"></i>
+                      </span>
+                    </button>
+                  </form>
+                <% end %>
+
+                <% if card[:userid] == userid  %>
+                  <form method="post" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button type="submit" class="button is-danger is-small is-rounded">
+                      <span>Delete</span>
+                      <span class="icon">
+                        <i class="fas fa-times"></i>
+                      </span>
+                    </button>
+                  </form>
+                <% end %>
+              </div>
+
+            </div>
+          </div>
+
         <% end %>
 
-        <%= erb :form, locals: { board: board, column: column } %>
+        <form action="/boards/<%= board[:id] %>/cards" method="POST" class="mt-5">
+          <input type="hidden" name="column" value="<%= column %>" />
+
+          <div class="field has-addons is-fullwidth">
+            <div class="control is-expanded">
+              <input type="text" class="input is-success" placeholder="What's on your mind?..." name="message" id="message" />
+            </div>
+            <div class="control">
+              <button class="button is-success" type="submit">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+
       </div>
     <% end %>
   </div>
