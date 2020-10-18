@@ -32,15 +32,13 @@ post '/username' do
 end
 
 get '/boards/:board' do
-  redirect '/username' unless cookies[:userid]
-
-  board = boards[params[:board]]
-  redirect '/' unless board
+  userid = ensure_user
+  board = ensure_board(boards)
 
   erb :board, locals: {
     board: board,
-    cards: board_cards(params[:board], cards),
-    userid: cookies[:userid]
+    cards: board_cards(board[:id], cards),
+    userid: userid
   }
 end
 
@@ -57,31 +55,31 @@ post '/boards' do
 end
 
 post '/boards/:board/cards' do
-  board = boards[params[:board]]
-  redirect '/' unless board
+  userid = ensure_user
+  ensure_board(boards)
 
   cards << params
            .slice(:board, :column, :message)
-           .merge(id: SecureRandom.uuid, username: cookies[:username], userid: cookies[:userid], votes: [])
+           .merge(id: SecureRandom.uuid, username: cookies[:username], userid: userid, votes: [])
 
   redirect "/boards/#{params[:board]}"
 end
 
 get '/boards/:board/cards/:card/edit' do
-  board = boards[params[:board]]
-  redirect '/' unless board
+  userid = ensure_user
+  board = ensure_board(boards)
 
-  card = cards.find { |c| c[:id] == params[:card] && c[:userid] == cookies[:userid] }
+  card = cards.find { |c| c[:id] == params[:card] && c[:userid] == userid }
   redirect "/boards/#{params[:board]}" unless card
 
   erb :card, locals: { board: board, card: card }
 end
 
 post '/boards/:board/cards/:card' do
-  board = boards[params[:board]]
-  redirect '/' unless board
+  userid = ensure_user
+  board = ensure_board(boards)
 
-  card = cards.find { |c| c[:board] == board[:id] && c[:id] == params[:card] && c[:userid] == cookies[:userid] }
+  card = cards.find { |c| c[:board] == board[:id] && c[:id] == params[:card] && c[:userid] == userid }
   redirect "/boards/#{params[:board]}" unless card
 
   card.merge!(params.slice(:column, :message))
@@ -90,38 +88,40 @@ post '/boards/:board/cards/:card' do
 end
 
 delete '/boards/:board/cards/:card' do
-  cards.delete_if { |c| c[:id] == params[:card] && c[:userid] == cookies[:userid] }
+  userid = ensure_user
+  board = ensure_board(boards)
 
-  redirect "/boards/#{params[:board]}"
+  cards.delete_if { |c| c[:id] == params[:card] && c[:userid] == userid }
+
+  redirect "/boards/#{board[:id]}"
 end
 
 post '/boards/:board/cards/:card/vote' do
-  board = boards[params[:board]]
-  redirect '/' unless board
+  userid = ensure_user
+  board = ensure_board(boards)
 
   card = cards.find { |c| c[:id] == params[:card] }
   redirect "/#{board[:id]}" unless card
 
   redirect "/boards/#{board[:id]}" if remaining_votes(board, cards, cookies[:userid]) <= 0
 
-  card[:votes] << cookies[:userid]
+  card[:votes] << userid
   redirect "/boards/#{board[:id]}"
 end
 
 delete '/boards/:board/cards/:card/vote' do
-  board = boards[params[:board]]
-  redirect '/' unless board
+  userid = ensure_user
+  board = ensure_board(boards)
 
   card = cards.find { |c| c[:id] == params[:card] }
   redirect "/#{board[:id]}" unless card
 
-  card[:votes].delete(cookies[:userid])
+  card[:votes].delete(userid)
   redirect "/boards/#{board[:id]}"
 end
 
 get '/boards/:board/export/markdown' do
-  board = boards[params[:board]]
-  redirect '/' unless board
+  board = ensure_board(boards)
 
   content_type 'text/markdown'
 

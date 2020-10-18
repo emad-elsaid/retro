@@ -19,4 +19,15 @@ helpers do
       .count { |vote| vote == userid }
     board[:allowed_votes] - votes
   end
+
+  def ensure_user
+    redirect '/username' unless cookies[:userid]
+    cookies[:userid]
+  end
+
+  def ensure_board(boards)
+    board = boards[params[:board]]
+    redirect '/' unless board
+    board
+  end
 end
