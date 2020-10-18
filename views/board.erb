@@ -10,7 +10,7 @@
         <h1 class="subtitle"><%=h column %></h1>
 
         <% cards.filter { |card| card[:column] == column }.each do |card| %>
-          <%= erb :card, locals: { card: card, board: board, userid: userid } %>
+          <%= erb :card, locals: { card: card, board: board, cards: cards, userid: userid } %>
         <% end %>
 
         <%= erb :form, locals: { board: board, column: column } %>

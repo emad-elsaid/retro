@@ -77,7 +77,17 @@ post '/boards/:board/cards/:card/vote' do
   redirect "/boards/#{board[:id]}" if remaining_votes(board, cards, cookies[:userid]) <= 0
 
   card[:votes] << cookies[:userid]
+  redirect "/boards/#{board[:id]}"
+end
 
+delete '/boards/:board/cards/:card/vote' do
+  board = boards[params[:board]]
+  redirect '/' unless board
+
+  card = cards.find { |c| c[:id] == params[:card] }
+  redirect "/#{board[:id]}" unless card
+
+  card[:votes].delete(cookies[:userid])
   redirect "/boards/#{board[:id]}"
 end
 

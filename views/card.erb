@@ -11,6 +11,7 @@
     </div>
 
     <div class="content">
+      <% if remaining_votes(board, cards, userid) > 0 %>
       <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>/vote">
         <button type="submit" class="button is-success is-outlined">
           <span class="icon">
@@ -18,6 +19,18 @@
           </span>
         </button>
       </form>
+      <% end %>
+
+      <% if card[:votes].include?(userid) %>
+        <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>/vote">
+          <input type="hidden" name="_method" value="DELETE" />
+          <button type="submit" class="button is-danger is-outlined">
+            <span class="icon">
+              <i class="fas fa-thumbs-down"></i>
+            </span>
+          </button>
+        </form>
+      <% end %>
 
       <% if card[:userid] == userid  %>
         <form method="post" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>">
