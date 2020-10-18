@@ -1,15 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'bundler/inline'
+require 'bundler'
 
-gemfile do
-  source 'https://rubygems.org'
-  gem 'sinatra', require: false
-  gem 'sinatra-contrib'
-end
-
-require 'sinatra'
+Bundler.require
 require_relative 'helpers'
 
 set :port, 3000
