@@ -15,7 +15,12 @@
       <div class="content">
         <form method="post" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>">
           <input type="hidden" name="_method" value="DELETE" />
-          <button type="submit" class="button is-danger is-small is-rounded">Delete</button>
+          <button type="submit" class="button is-danger is-small is-rounded">
+            <span>Delete</span>
+            <span class="icon is-small">
+              <i class="fas fa-times"></i>
+            </span>
+          </button>
         </form>
       </div>
     <% end %>
