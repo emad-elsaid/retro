@@ -1,28 +1,14 @@
-<form action="/boards/<%= board[:id] %>/cards" method="POST">
+<form action="/boards/<%= board[:id] %>/cards" method="POST" class="mt-5">
+  <input type="hidden" name="column" value="<%= column %>" />
 
-  <div class="field">
-    <label class="label" for="column">Column</label>
-    <div class="control">
-      <div class="select is-fullwidth">
-        <select name="column" id="column">
-          <% board[:columns].each do |column| %>
-            <option value="<%=h column %>"><%=h column %></option>
-          <% end %>
-        </select>
-      </div>
+  <div class="field has-addons is-fullwidth">
+    <div class="control is-expanded">
+      <input type="text" class="input" placeholder="What's on your mind?..." name="message" id="message" />
     </div>
-  </div>
-
-  <div class="field">
-    <label class="label" for="message">Message</label>
     <div class="control">
-      <textarea class="textarea" placeholder="What's on your mind?..." name="message" id="message"></textarea>
-    </div>
-  </div>
-
-  <div class="field">
-    <div class="control">
-      <button class="button is-link" type="submit">Send</button>
+      <button class="button is-link" type="submit">
+        <i class="fas fa-paper-plane"></i>
+      </button>
     </div>
   </div>
 

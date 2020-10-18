@@ -1,10 +1,16 @@
-<div class="columns">
-  <div class="column is-one-fifth">
-    <section class="section">
-      <%= erb :form, locals: { board: board } %>
-    </section>
+<section class="section">
+  <h1 class="title"><%=h board[:name] %></h1>
+  <div class="columns">
+    <% board[:columns].each do |column| %>
+      <div class="column">
+        <h1 class="subtitle"><%=h column %></h1>
+
+        <% cards.filter { |card| card[:column] == column }.each do |card| %>
+          <%= erb :card, locals: { card: card, board: board, userid: userid } %>
+        <% end %>
+
+        <%= erb :form, locals: { board: board, column: column } %>
+      </div>
+    <% end %>
   </div>
-  <div class="column">
-    <%= erb :cards, locals: { board: board, cards: cards, userid: userid } %>
-  </div>
-</div>
+</section>
