@@ -22,7 +22,7 @@ spec:
     spec:
       {{- if .Values.image.PullSecrets }}
       imagePullSecrets:
-        -name: {{ .Values.image.PullSecrets }}
+        - name: {{ .Values.image.PullSecrets }}
         
       {{- end }}
       serviceAccountName: {{ include "retro-app.serviceAccountName" . }}
