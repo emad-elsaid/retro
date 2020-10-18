@@ -96,3 +96,15 @@ delete '/boards/:board/cards/:card' do
 
   redirect "/boards/#{params[:board]}"
 end
+
+get '/boards/:board/export/markdown' do
+  board = boards[params[:board]]
+  redirect '/' unless board
+
+  content_type 'text/markdown'
+
+  erb :markdown, layout: false, locals: {
+    board: board,
+    cards: board_cards(params[:board], cards)
+  }
+end
