@@ -3,27 +3,34 @@
     <div class="content">
       <%=h card[:message] %>
       <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
-      <a href="/boards/<%= card[:board] %>/cards/<%= card[:id] %>/up_vote">
-        <span class="icon has-text-info">
-          <i class="fas fa-thumbs-up"></i>
-        </span>
-      </a>
-      <small class="has-text-info"><%=h card[:votes].count %></small>
+
+      <span class="icon">
+        <i class="fas fa-thumbs-up"></i>
+      </span>
+      <%=h card[:votes].count %>
     </div>
 
-    <% if card[:userid] == userid  %>
-      <div class="content">
+    <div class="content">
+      <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>/vote">
+        <button type="submit" class="button is-success is-outlined">
+          <span class="icon">
+            <i class="fas fa-thumbs-up"></i>
+          </span>
+        </button>
+      </form>
+
+      <% if card[:userid] == userid  %>
         <form method="post" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>">
           <input type="hidden" name="_method" value="DELETE" />
           <button type="submit" class="button is-danger is-small is-rounded">
             <span>Delete</span>
-            <span class="icon is-small">
+            <span class="icon">
               <i class="fas fa-times"></i>
             </span>
           </button>
         </form>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
 
   </div>
 </div>

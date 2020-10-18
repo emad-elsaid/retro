@@ -1,7 +1,7 @@
 <section class="section">
   <h1 class="title"><%=h board[:name] %></h1>
   <p class="content">
-    <small class="has-text-grey-light"><%= board[:allowed_votes] - votes_count(cards, userid) %> Remaining votes for you.</small>
+    <small class="has-text-grey-light"><%= remaining_votes(board, cards, userid) %> Remaining votes for you.</small>
   </p>
 
   <div class="columns">

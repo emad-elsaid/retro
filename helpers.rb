@@ -11,7 +11,12 @@ helpers do
     cards.select { |c| c[:board] == board }
   end
 
-  def votes_count(cards, userid)
-    cards.map { |c| c[:votes] }.flatten.count { |v| v == userid }
+  def remaining_votes(board, cards, userid)
+    votes = cards
+      .select { |card| card[:board] == board[:id] }
+      .map { |card| card[:votes] }
+      .flatten
+      .count { |vote| vote == userid }
+    board[:allowed_votes] - votes
   end
 end

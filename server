@@ -67,15 +67,14 @@ post '/boards/:board/cards' do
   redirect "/boards/#{params[:board]}"
 end
 
-get '/boards/:board/cards/:card/up_vote' do
+post '/boards/:board/cards/:card/vote' do
   board = boards[params[:board]]
   redirect '/' unless board
 
   card = cards.find { |c| c[:id] == params[:card] }
   redirect "/#{board[:id]}" unless card
 
-  votes = cards.count { |c| c[:board] == board[:id] && c[:votes].include?(cookies[:userid]) }
-  redirect "/boards/#{board[:id]}" if votes >= board[:allowed_votes]
+  redirect "/boards/#{board[:id]}" if remaining_votes(board, cards, cookies[:userid]) <= 0
 
   card[:votes] << cookies[:userid]
 
