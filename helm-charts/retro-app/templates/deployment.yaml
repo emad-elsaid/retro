@@ -20,9 +20,9 @@ spec:
       labels:
         {{- include "retro-app.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.imagePullSecrets }}
+      {{- if .Values.image.PullSecrets }}
       imagePullSecrets:
-        -name: {{ .Values.imagePullSecrets }}
+        -name: {{ .Values.image.PullSecrets }}
         
       {{- end }}
       serviceAccountName: {{ include "retro-app.serviceAccountName" . }}

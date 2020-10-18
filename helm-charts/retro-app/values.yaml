@@ -10,7 +10,8 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
   containerPort: 3000
-
+  PullSecrets: docker-registry-github
+  
 imagePullSecrets: docker-registry-github
 nameOverride: ""
 fullnameOverride: ""
