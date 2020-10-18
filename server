@@ -37,7 +37,11 @@ get '/boards/:board' do
   board = boards[params[:board]]
   redirect '/' unless board
 
-  erb :board, locals: { board: boards[params[:board]] }
+  erb :board, locals: {
+    board: board,
+    cards: board_cards(params[:board], cards),
+    userid: cookies[:userid]
+  }
 end
 
 post '/boards' do
@@ -50,17 +54,6 @@ post '/boards' do
 
   boards[id] = board
   redirect "/boards/#{id}"
-end
-
-get '/boards/:board/cards' do
-  board = boards[params[:board]]
-  redirect '/' unless board
-
-  erb :cards, locals: {
-    board: boards[params[:board]],
-    cards: board_cards(params[:board], cards),
-    userid: cookies[:userid]
-  }
 end
 
 post '/boards/:board/cards' do
@@ -79,18 +72,18 @@ get '/boards/:board/cards/:card/up_vote' do
   redirect '/' unless board
 
   card = cards.find { |c| c[:id] == params[:card] }
-  redirect "/#{board[:id]}/cards" unless card
+  redirect "/#{board[:id]}" unless card
 
   votes = cards.count { |c| c[:board] == board[:id] && c[:votes].include?(cookies[:userid]) }
-  redirect "/boards/#{board[:id]}/cards" if votes >= board[:allowed_votes]
+  redirect "/boards/#{board[:id]}" if votes >= board[:allowed_votes]
 
   card[:votes] << cookies[:userid]
 
-  redirect "/boards/#{board[:id]}/cards"
+  redirect "/boards/#{board[:id]}"
 end
 
 delete '/boards/:board/cards/:card' do
   cards.delete_if { |c| c[:id] == params[:card] && c[:userid] == cookies[:userid] }
 
-  redirect "/boards/#{params[:board]}/cards"
+  redirect "/boards/#{params[:board]}"
 end
