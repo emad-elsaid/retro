@@ -17,13 +17,6 @@ set :port, 3000
 boards = {}
 cards = []
 
-def assign_user_to_board(board, user)
-  return unless board[:users][user].nil?
-
-  board[:users][user] = {}
-  board[:users][user][:votes] = 0
-end
-
 get '/' do
   erb :index
 end
@@ -35,7 +28,6 @@ end
 post '/username' do
   cookies[:username] = params[:username]
   cookies[:userid] = SecureRandom.uuid unless cookies.key?(:userid)
-  assign_user_to_board(boards[params[:board]], cookies[:username])
   redirect params[:back]
 end
 
@@ -45,7 +37,6 @@ get '/boards/:board' do
   board = boards[params[:board]]
   redirect '/' unless board
 
-  assign_user_to_board(board, cookies[:username])
   erb :board, locals: { board: boards[params[:board]] }
 end
 
@@ -78,25 +69,24 @@ post '/boards/:board/cards' do
 
   cards << params
            .slice(:board, :column, :message)
-           .merge(id: SecureRandom.uuid, username: cookies[:username], userid: cookies[:userid], votes: 0)
+           .merge(id: SecureRandom.uuid, username: cookies[:username], userid: cookies[:userid], votes: [])
 
   redirect "/boards/#{params[:board]}"
 end
 
 get '/boards/:board/cards/:card/up_vote' do
-  board = params[:board]
-  card_id = params[:card]
+  board = boards[params[:board]]
   redirect '/' unless board
-  redirect '/' unless card_id
 
-  user_votes = boards[board][:users][cookies[:username]][:votes].to_i
-  redirect "/boards/#{params[:board]}" if user_votes >= boards[board][:allowed_votes].to_i
+  card = cards.find { |c| c[:id] == params[:card] }
+  redirect "/#{board[:id]}/cards" unless card
 
-  voted_card = cards.find{|card| card[:id] == card_id }
-  voted_card[:votes] += 1
-  boards[board][:users][cookies[:username]][:votes] += 1
+  votes = cards.count { |c| c[:board] == board[:id] && c[:votes].include?(cookies[:userid]) }
+  redirect "/boards/#{board[:id]}" if votes >= board[:allowed_votes]
 
-  redirect "/boards/#{params[:board]}"
+  card[:votes] << cookies[:userid]
+
+  redirect "/boards/#{board[:id]}"
 end
 
 delete '/boards/:board/cards/:card' do

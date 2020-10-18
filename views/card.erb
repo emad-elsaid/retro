@@ -8,7 +8,7 @@
           <i class="fas fa-thumbs-up"></i>
         </span>
       </a>
-      <small class="has-text-info"><%=h card[:votes] %></small>
+      <small class="has-text-info"><%=h card[:votes].count %></small>
     </div>
 
     <% if card[:userid] == userid  %>
