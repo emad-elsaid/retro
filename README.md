@@ -24,7 +24,7 @@ Run the server script, it'll install the needed dependencies
 ```
 ./server
 ```
-Usuing Docker 
+Using Docker 
 
 ```
 docker build -t retro .
