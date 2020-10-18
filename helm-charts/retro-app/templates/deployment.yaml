@@ -20,9 +20,9 @@ spec:
       labels:
         {{- include "retro-app.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:  {{ .Values.imagePullSecrets }}
+        
       {{- end }}
       serviceAccountName: {{ include "retro-app.serviceAccountName" . }}
       securityContext:
