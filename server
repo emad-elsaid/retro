@@ -67,6 +67,34 @@ post '/boards/:board/cards' do
   redirect "/boards/#{params[:board]}"
 end
 
+get '/boards/:board/cards/:card/edit' do
+  board = boards[params[:board]]
+  redirect '/' unless board
+
+  card = cards.find { |c| c[:id] == params[:card] && c[:userid] == cookies[:userid] }
+  redirect "/boards/#{params[:board]}" unless card
+
+  erb :card, locals: { board: board, card: card }
+end
+
+post '/boards/:board/cards/:card' do
+  board = boards[params[:board]]
+  redirect '/' unless board
+
+  card = cards.find { |c| c[:board] == board[:id] && c[:id] == params[:card] && c[:userid] == cookies[:userid] }
+  redirect "/boards/#{params[:board]}" unless card
+
+  card.merge!(params.slice(:column, :message))
+
+  redirect "/boards/#{params[:board]}"
+end
+
+delete '/boards/:board/cards/:card' do
+  cards.delete_if { |c| c[:id] == params[:card] && c[:userid] == cookies[:userid] }
+
+  redirect "/boards/#{params[:board]}"
+end
+
 post '/boards/:board/cards/:card/vote' do
   board = boards[params[:board]]
   redirect '/' unless board
@@ -89,12 +117,6 @@ delete '/boards/:board/cards/:card/vote' do
 
   card[:votes].delete(cookies[:userid])
   redirect "/boards/#{board[:id]}"
-end
-
-delete '/boards/:board/cards/:card' do
-  cards.delete_if { |c| c[:id] == params[:card] && c[:userid] == cookies[:userid] }
-
-  redirect "/boards/#{params[:board]}"
 end
 
 get '/boards/:board/export/markdown' do

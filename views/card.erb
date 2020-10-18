@@ -1,0 +1,40 @@
+<section class="section">
+  <div class="container">
+
+    <form action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>" method="POST">
+      <div class="field is-fullwidth">
+        <label class="label" for="column">Column</label>
+        <div class="control">
+          <div class="select">
+            <select id="column" name="column">
+              <% board[:columns].each do |column| %>
+                <option value="<%=h column %>" <%= "selected" if card[:column] == column %>><%=h column %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field is-fullwidth">
+        <div class="field">
+          <label class="label" for="message">Message</label>
+          <div class="control">
+            <input type="text" class="input" name="message" id="message" value="<%=h card[:message] %>" />
+          </div>
+        </div>
+      </div>
+
+      <div class="field is-fullwidth">
+        <div class="control">
+          <button class="button is-link" type="submit">
+            <span>Update</span>
+            <span class="icon">
+              <i class="fas fa-paper-plane"></i>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</section>

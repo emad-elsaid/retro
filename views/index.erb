@@ -1,34 +1,36 @@
 <section class="section">
+  <div class="container">
 
-  <form action="/boards" method="POST">
+    <form action="/boards" method="POST">
 
-    <div class="field">
-      <label class="label" for="name">Retro name</label>
-      <div class="control is-fullwidth">
-        <input class="input" type="text" placeholder="Retro name..." name="name" id="name">
+      <div class="field">
+        <label class="label" for="name">Retro name</label>
+        <div class="control is-fullwidth">
+          <input class="input" type="text" placeholder="Retro name..." name="name" id="name">
+        </div>
       </div>
-    </div>
 
-    <div class="field">
-      <label class="label" for="allowed_votes">Allowed Votes</label>
-      <div class="control is-fullwidth">
-        <input class="input" type="number" name="allowed_votes" id="allowed_votes" value="1" />
+      <div class="field">
+        <label class="label" for="allowed_votes">Allowed Votes</label>
+        <div class="control is-fullwidth">
+          <input class="input" type="number" name="allowed_votes" id="allowed_votes" value="1" />
+        </div>
       </div>
-    </div>
 
-    <div class="field">
-      <label class="label" for="columns">Columns</label>
-      <div class="control">
-        <textarea class="textarea" placeholder="Each line a column..." name="columns" id="columns"></textarea>
+      <div class="field">
+        <label class="label" for="columns">Columns</label>
+        <div class="control">
+          <textarea class="textarea" placeholder="Each line a column..." name="columns" id="columns"></textarea>
+        </div>
       </div>
-    </div>
 
-    <div class="field">
-      <div class="control">
-        <button class="button is-link" type="submit">Create</button>
+      <div class="field">
+        <div class="control">
+          <button class="button is-link" type="submit">Create</button>
+        </div>
       </div>
-    </div>
 
-  </form>
+    </form>
 
+  </div>
 </section>
