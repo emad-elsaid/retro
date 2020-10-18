@@ -86,7 +86,7 @@ get '/boards/:board/cards/:card/up_vote' do
 
   card[:votes] << cookies[:userid]
 
-  redirect "/boards/#{board[:id]}"
+  redirect "/boards/#{board[:id]}/cards"
 end
 
 delete '/boards/:board/cards/:card' do
