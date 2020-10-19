@@ -12,6 +12,7 @@ boards = {}
 cards = []
 
 get '/' do
+  ensure_user
   erb :index
 end
 

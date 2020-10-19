@@ -1,18 +1,20 @@
 <section class="section">
-  <form action="/username" method="POST">
-    <input name="back" type="hidden" value="<%= back %>"/>
+  <div class="container">
+    <form action="/username" method="POST">
+      <input name="back" type="hidden" value="<%= back %>"/>
 
-    <div class="field">
-      <label class="label" for="username">Your name</label>
-      <div class="control is-fullwidth">
-        <input class="input" type="text" placeholder="Your name..." name="username" id="username">
+      <div class="field">
+        <label class="label" for="username">Your name</label>
+        <div class="control is-fullwidth">
+          <input class="input" type="text" placeholder="Your name..." name="username" id="username">
+        </div>
       </div>
-    </div>
 
-    <div class="field">
-      <div class="control">
-        <button class="button is-link" type="submit">Set name</button>
+      <div class="field">
+        <div class="control">
+          <button class="button is-link" type="submit">Set name</button>
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </section>
