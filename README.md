@@ -26,12 +26,18 @@ bundle install
 ./server
 ```
 
-Using Docker 
+Using Docker
 
 ```
 docker build -t retro .
 docker run -d -p 3000:3000 retro
 ```
+
+## Kubernetes deployment
+
+Mohammed Ragab created a kubernetes helm chart to deploy it on your cluster. The repository is available here
+
+https://github.com/ragoob/retro-helm-charts
 
 ## Guidelines
 
