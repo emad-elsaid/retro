@@ -1,0 +1,7 @@
+<style> html{ overflow: hidden; } </style>
+
+<h1 class="title has-text-centered mt-2">
+  <%= (remaining / 60).to_i.to_s.rjust(2, '0') %>
+  :
+  <%= (remaining % 60).to_i.to_s.rjust(2, '0') %>
+</h1>

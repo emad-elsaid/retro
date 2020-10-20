@@ -17,6 +17,7 @@ cards to it.
 - The board has a form to create a new card in each column
 - Users can edit and delete boards
 - Users can vote on cards
+- Timer at the top is just an iframe that refresh every couple seconds and can be changed by the creator of the board from the edit page
 
 ## Running the server
 

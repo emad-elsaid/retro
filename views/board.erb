@@ -1,10 +1,11 @@
-<% votes = remaining_votes(board, cards, userid) %>
+<iframe frameborder="0" src="/boards/<%= board[:id] %>/countdown" style="width: 100%; height: 3rem;"></iframe>
 
 <section class="section">
   <h1 class="title is-3"><%=h board[:name] %></h1>
 
   <p class="content">
-    Export:
+    <a href="/boards/<%= board[:id] %>/edit">Edit</a>
+    | Export:
     <a href="/boards/<%= board[:id] %>/export/markdown">Markdown</a>
     <small class="has-text-grey-light">| <%= votes %> Remaining votes for you.</small>
   </p>

@@ -7,13 +7,21 @@ Bundler.require
 require_relative 'helpers'
 
 set :port, 3000
+set :strict_paths, false
 
 boards = {}
 cards = []
 
 get '/' do
   ensure_user
-  erb :index
+
+  defaults = {
+    name: '',
+    allowed_votes: 3,
+    columns: ['Start', 'Stop', 'Continue', 'Action Points']
+  }
+
+  erb :index, locals: { board: defaults }
 end
 
 get '/username' do
@@ -34,19 +42,43 @@ get '/boards/:board' do
   erb :board, locals: {
     board: board,
     cards: board_cards(board[:id], cards),
-    userid: userid
+    userid: userid,
+    votes: remaining_votes(board, cards, userid)
   }
 end
 
 post '/boards' do
+  userid = ensure_user
   id = SecureRandom.uuid
-  board = params.slice(:name, :columns, :allowed_votes).merge(id: id)
+  board = params.slice(:name, :columns, :allowed_votes, :countdown).merge(id: id, userid: userid)
   board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
   board[:allowed_votes] = board[:allowed_votes].to_i
+  board[:countdown] = Time.now + board[:countdown].to_i * 60
 
   boards[id] = board
 
   redirect "/boards/#{id}"
+end
+
+get '/boards/:board/edit' do
+  userid = ensure_user
+  board = ensure_board(boards)
+  redirect "/boards/#{board[:id]}" unless board[:userid] == userid
+
+  erb :index, locals: { board: board }
+end
+
+post '/boards/:board' do
+  userid = ensure_user
+  board = ensure_board(boards)
+  redirect "/boards/#{board[:id]}" unless board[:userid] == userid
+
+  board.merge!(params.slice(:name, :columns, :allowed_votes, :countdown))
+  board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
+  board[:allowed_votes] = board[:allowed_votes].to_i
+  board[:countdown] = Time.now + board[:countdown].to_i * 60
+
+  redirect "boards/#{id}"
 end
 
 post '/boards/:board/cards' do
@@ -117,4 +149,13 @@ get '/boards/:board/export/markdown' do
     board: board,
     cards: board_cards(board[:id], cards)
   }
+end
+
+get '/boards/:board/countdown' do
+  userid = ensure_user
+  board = ensure_board(boards)
+  remaining = [board[:countdown] - Time.now, 0].max
+
+  headers['refresh'] = '5'
+  erb :countdown, locals: { board: board, remaining: remaining, userid: userid }
 end

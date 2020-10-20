@@ -1,26 +1,38 @@
 <section class="section">
   <div class="container">
 
-    <form action="/boards" method="POST">
+    <form action="/boards/<%= board[:id] %>" method="POST">
 
       <div class="field">
         <label class="label" for="name">Retro name</label>
         <div class="control is-fullwidth">
-          <input class="input" type="text" placeholder="Retro name..." name="name" id="name">
+          <input class="input" type="text" placeholder="Retro name..." name="name" id="name" value="<%=h board[:name] %>">
+        </div>
+      </div>
+
+      <div class="field is-fullwidth">
+        <label class="label" for="allowed_votes">Allowed votes</label>
+        <div class="control is-expanded">
+          <input class="input" type="number" name="allowed_votes" id="allowed_votes" value="<%=h board[:allowed_votes] %>" />
         </div>
       </div>
 
       <div class="field">
-        <label class="label" for="allowed_votes">Allowed Votes</label>
-        <div class="control is-fullwidth">
-          <input class="input" type="number" name="allowed_votes" id="allowed_votes" value="1" />
+        <label class="label" for="countdown">Count down</label>
+        <div class="field has-addons is-fullwidth">
+          <p class="control has-addons is-expanded">
+            <input class="input" type="number" name="countdown" id="countdown" value="0" />
+          </p>
+          <p class="control">
+            <a class="button is-static"> Minutes </a>
+          </p>
         </div>
       </div>
 
       <div class="field">
         <label class="label" for="columns">Columns</label>
         <div class="control">
-          <textarea class="textarea" placeholder="Each line a column..." name="columns" id="columns"></textarea>
+          <textarea class="textarea" placeholder="Each line a column..." name="columns" id="columns"><%=h board[:columns].join("\n") %></textarea>
         </div>
       </div>
 
