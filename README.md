@@ -34,6 +34,12 @@ docker build -t retro .
 docker run -d -p 3000:3000 retro
 ```
 
+Using Docker hub prebuilt image
+
+```
+docker run -d -p 3000:3000 emadelsaid/retro
+```
+
 ## Kubernetes deployment
 
 Mohammed Ragab created a kubernetes helm chart to deploy it on your cluster. The repository is available here
