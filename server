@@ -7,7 +7,7 @@ Bundler.require
 require_relative 'helpers'
 
 set :port, 3000
-set :strict_paths, false
+disable :strict_paths
 
 boards = {}
 
