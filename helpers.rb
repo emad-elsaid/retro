@@ -7,16 +7,8 @@ helpers do
     Rack::Utils.escape_html(text)
   end
 
-  def board_cards(board, cards)
-    cards.select { |c| c[:board] == board }
-  end
-
-  def remaining_votes(board, cards, userid)
-    votes = cards
-      .select { |card| card[:board] == board[:id] }
-      .map { |card| card[:votes] }
-      .flatten
-      .count { |vote| vote == userid }
+  def remaining_votes(board, userid)
+    votes = board[:cards].sum { |_, card| card[:votes].count(userid) }
     board[:allowed_votes] - votes
   end
 

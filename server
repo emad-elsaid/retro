@@ -10,7 +10,6 @@ set :port, 3000
 set :strict_paths, false
 
 boards = {}
-cards = []
 
 get '/' do
   ensure_user
@@ -41,16 +40,15 @@ get '/boards/:board' do
 
   erb :board, locals: {
     board: board,
-    cards: board_cards(board[:id], cards),
     userid: userid,
-    votes: remaining_votes(board, cards, userid)
+    votes: remaining_votes(board, userid)
   }
 end
 
 post '/boards' do
   userid = ensure_user
   id = SecureRandom.uuid
-  board = params.slice(:name, :columns, :allowed_votes, :countdown).merge(id: id, userid: userid)
+  board = params.slice(:name, :columns, :allowed_votes, :countdown).merge(id: id, userid: userid, cards: {})
   board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
   board[:allowed_votes] = board[:allowed_votes].to_i
   board[:countdown] = Time.now + board[:countdown].to_i * 60
@@ -85,9 +83,9 @@ post '/boards/:board/cards' do
   userid = ensure_user
   board = ensure_board(boards)
 
-  cards << params
-           .slice(:board, :column, :message)
-           .merge(id: SecureRandom.uuid, username: cookies[:username], userid: userid, votes: [])
+  board[:cards][SecureRandom.uuid] = params
+                   .slice(:column, :message)
+                   .merge(username: cookies[:username], userid: userid, votes: [])
 
   redirect "/boards/#{board[:id]}"
 end
@@ -95,16 +93,18 @@ end
 get '/boards/:board/cards/:card/edit' do
   userid = ensure_user
   board = ensure_board(boards)
+  card = board[:cards][params[:card]]
 
-  card = cards.find { |c| c[:id] == params[:card] && c[:userid] == userid } || redirect("/boards/#{board[:id]}")
+  redirect("/boards/#{board[:id]}") unless card || card[:userid] == userid
 
-  erb :card, locals: { board: board, card: card }
+  erb :card, locals: { board: board, card: card, id: params[:card] }
 end
 
 post '/boards/:board/cards/:card' do
   userid = ensure_user
   board = ensure_board(boards)
-  card = cards.find { |c| c[:id] == params[:card] && c[:userid] == userid } || redirect("/boards/#{board[:id]}")
+  card = board[:cards][params[:card]]
+  redirect("/boards/#{board[:id]}") unless card || card[:userid] == userid
 
   card.merge!(params.slice(:column, :message))
 
@@ -114,8 +114,9 @@ end
 delete '/boards/:board/cards/:card' do
   userid = ensure_user
   board = ensure_board(boards)
+  card = board[:cards][params[:card]]
 
-  cards.delete_if { |c| c[:id] == params[:card] && c[:userid] == userid }
+  board[:cards].delete(params[:card]) if card[:userid] == userid
 
   redirect "/boards/#{board[:id]}"
 end
@@ -123,8 +124,8 @@ end
 post '/boards/:board/cards/:card/vote' do
   userid = ensure_user
   board = ensure_board(boards)
-  card = cards.find { |c| c[:id] == params[:card] } || redirect("/#{board[:id]}")
-  redirect "/boards/#{board[:id]}" if remaining_votes(board, cards, userid) <= 0
+  card = board[:cards][params[:card]] || redirect("/#{board[:id]}")
+  redirect "/boards/#{board[:id]}" if remaining_votes(board, userid) <= 0
 
   card[:votes] << userid
 
@@ -134,7 +135,7 @@ end
 delete '/boards/:board/cards/:card/vote' do
   userid = ensure_user
   board = ensure_board(boards)
-  card = cards.find { |c| c[:id] == params[:card] } || redirect("/#{board[:id]}")
+  card = board[:cards][params[:card]] || redirect("/#{board[:id]}")
 
   card[:votes].delete(userid)
 
@@ -145,10 +146,7 @@ get '/boards/:board/export/markdown' do
   board = ensure_board(boards)
 
   content_type 'text/markdown'
-  erb :markdown, layout: false, locals: {
-    board: board,
-    cards: board_cards(board[:id], cards)
-  }
+  erb :markdown, layout: false, locals: { board: board }
 end
 
 get '/boards/:board/countdown' do

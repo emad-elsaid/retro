@@ -6,7 +6,7 @@
 
 ## <%= column %>
 
-<% cards.select { |card| card[:column] == column }.each do |card| %>
+<% board[:cards].select { |_, card| card[:column] == column }.each do |_, card| %>
 * <%=h card[:username] %>: <%=h card[:message] %>
 <% end %>
 

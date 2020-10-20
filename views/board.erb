@@ -15,7 +15,7 @@
       <div class="column">
         <h2 class="title is-5"><%=h column %></h2>
 
-        <% cards.filter { |card| card[:column] == column }.each do |card| %>
+        <% board[:cards].select { |_, card| card[:column] == column }.each do |id, card| %>
           <div class="card">
             <div class="card-content">
 
@@ -34,7 +34,7 @@
               <div class="content">
 
                 <% if votes > 0 %>
-                  <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>/vote">
+                  <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
                     <button type="submit" class="button is-success is-outlined">
                       <span class="icon">
                         <i class="fas fa-thumbs-up"></i>
@@ -44,7 +44,7 @@
                 <% end %>
 
                 <% if card[:votes].include?(userid) %>
-                  <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>/vote">
+                  <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
                     <input type="hidden" name="_method" value="DELETE" />
                     <button type="submit" class="button is-danger is-outlined">
                       <span class="icon">
@@ -55,7 +55,7 @@
                 <% end %>
 
                 <% if card[:userid] == userid  %>
-                  <form class="is-inline" method="post" action="/boards/<%= board[:id] %>/cards/<%= card[:id] %>">
+                  <form class="is-inline" method="post" action="/boards/<%= board[:id] %>/cards/<%= id %>">
                     <input type="hidden" name="_method" value="DELETE" />
                     <button type="submit" class="button is-danger is-outlined">
                       <span>Delete</span>
@@ -65,7 +65,7 @@
                     </button>
                   </form>
 
-                  <a class="button is-link is-outlined" href="/boards/<%= board[:id] %>/cards/<%= card[:id] %>/edit">
+                  <a class="button is-link is-outlined" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit">
                     <span>Edit</span>
                     <span class="icon">
                       <i class="fas fa-pen"></i>
