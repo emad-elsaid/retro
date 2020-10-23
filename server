@@ -166,5 +166,5 @@ get '/boards/:board/countdown' do
   remaining = [board[:countdown] - Time.now, 0].max
 
   headers['refresh'] = '5'
-  erb :countdown, layout: false, locals: { board: board, remaining: remaining, userid: userid }
+  erb :countdown, locals: { board: board, remaining: remaining, userid: userid }
 end
