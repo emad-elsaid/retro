@@ -5,10 +5,10 @@ A ruby HTTP server that allows users to create retrospective boards, and add
 cards to it.
 
 ### Light Mode
-![Screenshot 2020-10-23 at 16 10 41](https://user-images.githubusercontent.com/6358632/97014285-6919e500-154a-11eb-9485-62892777ad28.png)
+![Screenshot-2020-10-23_16-32-19](https://user-images.githubusercontent.com/54403/97016911-97e58a80-154d-11eb-9397-c3f9bad60231.png)
 
 ### Dark Mode
-![Screenshot 2020-10-23 at 16 10 50](https://user-images.githubusercontent.com/6358632/97014329-76cf6a80-154a-11eb-8e22-75f425fbdf43.png)
+![Screenshot-2020-10-23_16-32-49](https://user-images.githubusercontent.com/54403/97016826-813f3380-154d-11eb-844d-57ab8bfa535a.png)
 
 
 ## How it works
