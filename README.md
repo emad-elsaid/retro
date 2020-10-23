@@ -4,7 +4,11 @@ Retro
 A ruby HTTP server that allows users to create retrospective boards, and add
 cards to it.
 
-![Screenshot-2020-10-18_19-50-27](https://user-images.githubusercontent.com/54403/96375767-4028d700-117b-11eb-9794-e803118306bd.png)
+### Light Mode
+![Screenshot 2020-10-23 at 16 10 41](https://user-images.githubusercontent.com/6358632/97014285-6919e500-154a-11eb-9485-62892777ad28.png)
+
+### Dark Mode
+![Screenshot 2020-10-23 at 16 10 50](https://user-images.githubusercontent.com/6358632/97014329-76cf6a80-154a-11eb-8e22-75f425fbdf43.png)
 
 
 ## How it works
