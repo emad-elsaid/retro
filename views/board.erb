@@ -1,4 +1,18 @@
-<iframe frameborder="0" src="/boards/<%= board[:id] %>/countdown" style="width: 100%; height: 3rem;"></iframe>
+<div class="columns">
+  <div class="column ml-3 mt-3">
+    <h1 class="title has-text-weight-normal">RETRO</h1>
+  </div>
+  <div class="column has-text-centered">
+    <iframe frameborder="0" src="/boards/<%= board[:id] %>/countdown" style="width: 100%; height: 5rem"></iframe>
+  </div>
+  <div class="column has-text-right mr-3 mt-3">
+    <% if @theme == "light" %>
+      <a class="button is-link ml-2 mt-2" href="/mode/dark">Enable dark mode</a>
+    <% else %>
+      <a class="button is-link ml-2 mt-2" href="/mode/light">Enable light mode</a>
+    <% end %>
+  </div>
+</div>
 
 <section class="section">
   <h1 class="title is-3"><%=h board[:name] %></h1>
@@ -16,7 +30,7 @@
         <h2 class="title is-5"><%=h column %></h2>
 
         <% board[:cards].select { |_, card| card[:column] == column }.each do |id, card| %>
-          <div class="card">
+          <div class="card mt-2">
             <div class="card-content">
 
               <div class="content">
@@ -82,7 +96,7 @@
         <form action="/boards/<%= board[:id] %>/cards" method="POST" class="mt-5">
           <input type="hidden" name="column" value="<%= column %>" />
 
-          <div class="field has-addons is-fullwidth">
+          <div class="field has-addons is-fullwidth mt-2">
             <div class="control is-expanded">
               <input type="text" class="input is-success" placeholder="What's on your mind?..." name="message" id="message" />
             </div>

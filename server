@@ -11,6 +11,10 @@ disable :strict_paths
 
 boards = {}
 
+before do
+  @theme = cookies[:theme] || "light"
+end
+
 get '/' do
   ensure_user
 
@@ -21,6 +25,12 @@ get '/' do
   }
 
   erb :index, locals: { board: defaults }
+end
+
+get '/mode/:mode' do
+  cookies[:theme] = params[:mode]
+
+  redirect back
 end
 
 get '/username' do
@@ -137,7 +147,8 @@ delete '/boards/:board/cards/:card/vote' do
   board = ensure_board(boards)
   card = board[:cards][params[:card]] || redirect("/#{board[:id]}")
 
-  card[:votes].delete(userid)
+  index = card[:votes].find_index(userid)
+  card[:votes].delete_at(index)
 
   redirect "/boards/#{board[:id]}"
 end
