@@ -7,6 +7,10 @@ helpers do
     Rack::Utils.escape_html(text)
   end
 
+  def theme
+    cookies[:theme] || 'light'
+  end
+
   def remaining_votes(board, userid)
     votes = board[:cards].sum { |_, card| card[:votes].count(userid) }
     board[:allowed_votes] - votes

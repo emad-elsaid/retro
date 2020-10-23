@@ -12,7 +12,6 @@ disable :strict_paths
 boards = {}
 
 before do
-  @theme = cookies[:theme] || "light"
 end
 
 get '/' do
