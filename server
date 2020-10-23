@@ -76,7 +76,7 @@ post '/boards/:board' do
   board[:allowed_votes] = board[:allowed_votes].to_i
   board[:countdown] = Time.now + board[:countdown].to_i * 60
 
-  redirect "boards/#{id}"
+  redirect "boards/#{board[:id]}"
 end
 
 post '/boards/:board/cards' do
