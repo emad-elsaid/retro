@@ -50,6 +50,12 @@ Mohammed Ragab created a kubernetes helm chart to deploy it on your cluster. The
 
 https://github.com/ragoob/retro-helm-charts
 
+## Deploy to Heroku
+
+You can deploy it directly to Heroku, it must be one process as it's in memory storage
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Guidelines
 
 - No login needed
