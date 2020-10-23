@@ -11,17 +11,9 @@
 
   <p class="content">
     <% if theme == "light" %>
-      <a class="has-text-black" href="/mode/dark">
-        <span class="icon">
-          <i class="fas fa-moon"></i>
-        </span>
-      </a>
+      <a class="has-text-black" href="/mode/dark"> 🌙 </a>
     <% else %>
-      <a class="has-text-white" href="/mode/light">
-        <span class="icon">
-          <i class="fas fa-sun"></i>
-        </span>
-      </a>
+      <a class="has-text-white" href="/mode/light"> ☀️ </a>
     <% end %>
 
     | <a href="/boards/<%= board[:id] %>/edit">Edit</a>
@@ -36,15 +28,12 @@
         <h2 class="title is-5"><%=h column %></h2>
 
         <% board[:cards].select { |_, card| card[:column] == column }.each do |id, card| %>
-          <div class="card mt-2">
+          <div class="card mt-2" tabindex="-1">
             <div class="card-content">
 
               <div class="content">
                 <% if card[:votes].count > 0 %>
-                  <%=h card[:votes].count %>
-                  <span class="icon">
-                    <i class="fas fa-thumbs-up"></i>
-                  </span>
+                  <%=h card[:votes].count %> 👍
                 <% end %>
 
                 <%=h card[:message] %>
@@ -55,42 +44,24 @@
 
                 <% if votes > 0 %>
                   <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
-                    <button type="submit" class="button is-success is-outlined">
-                      <span class="icon">
-                        <i class="fas fa-thumbs-up"></i>
-                      </span>
-                    </button>
+                    <button type="submit" class="button is-success is-outlined"> 👍 </button>
                   </form>
                 <% end %>
 
                 <% if card[:votes].include?(userid) %>
                   <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
                     <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit" class="button is-danger is-outlined">
-                      <span class="icon">
-                        <i class="fas fa-thumbs-down"></i>
-                      </span>
-                    </button>
+                    <button type="submit" class="button is-danger is-outlined"> 👎 </button>
                   </form>
                 <% end %>
 
                 <% if card[:userid] == userid  %>
                   <form class="is-inline" method="post" action="/boards/<%= board[:id] %>/cards/<%= id %>">
                     <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit" class="button is-danger is-outlined">
-                      <span>Delete</span>
-                      <span class="icon">
-                        <i class="fas fa-times"></i>
-                      </span>
-                    </button>
+                    <button type="submit" class="button is-danger is-outlined"> Delete ❌ </button>
                   </form>
 
-                  <a class="button is-link is-outlined" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit">
-                    <span>Edit</span>
-                    <span class="icon">
-                      <i class="fas fa-pen"></i>
-                    </span>
-                  </a>
+                  <a class="button is-link is-outlined" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit"> Edit ✏️ </a>
                 <% end %>
               </div>
 
@@ -104,12 +75,10 @@
 
           <div class="field has-addons is-fullwidth mt-2">
             <div class="control is-expanded">
-              <input type="text" class="input is-success" placeholder="What's on your mind?..." name="message" id="message" />
+              <input type="text" class="input" placeholder="What's on your mind?..." name="message" id="message" />
             </div>
             <div class="control">
-              <button class="button is-success" type="submit">
-                <i class="fas fa-paper-plane"></i>
-              </button>
+              <button class="button" type="submit"> 📢 </button>
             </div>
           </div>
         </form>
