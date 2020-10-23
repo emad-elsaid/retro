@@ -62,3 +62,11 @@ You can deploy it directly to Heroku, it must be one process as it's in memory s
 - No persistent data
 - No Javascript
 - Minimal dependencies
+
+
+## Development notes
+
+To generate custom bulma CSS there is an executable script "./css" that will
+download bulma unzip it and write two SCSS files that generate both light and
+dark themes. use it in case you want to generate your own custome theme or
+update bulma to newer version

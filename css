@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+gem install --conservative sass
+wget --no-clobber --output-document=bulma.zip https://github.com/jgthms/bulma/releases/download/0.9.1/bulma-0.9.1.zip
+unzip -u bulma.zip
+
+cat << EOT > bulma_light.scss
+@charset "utf-8";
+@import "bulma/bulma.sass";
+EOT
+
+cat << EOT > bulma_dark.scss
+@charset "utf-8";
+@import "bulma/sass/utilities/initial-variables";
+\$text: \$white-ter;
+\$title-color: \$white-ter;
+\$label-color: \$white-ter;
+\$input-color: \$white-ter;
+\$scheme-main: \$black-ter;
+@import "bulma/bulma.sass";
+EOT
+
+sass --sourcemap=none \
+     --style compressed \
+     bulma_light.scss:public/css/bulma_light.css \
+     bulma_dark.scss:public/css/bulma_dark.css
+
+rm -rf bulma* .sass-cache
