@@ -11,9 +11,9 @@
 
   <p class="content">
     <% if theme == "light" %>
-      <a class="has-text-black" href="/mode/dark"> 🌙 </a>
+      <a class="has-text-black" href="/mode/dark"> 🌙 Dark mode</a>
     <% else %>
-      <a class="has-text-white" href="/mode/light"> ☀️ </a>
+      <a class="has-text-white" href="/mode/light"> ☀️ Light mode</a>
     <% end %>
 
     | <a href="/boards/<%= board[:id] %>/edit">Edit</a>
@@ -30,38 +30,38 @@
         <% board[:cards].select { |_, card| card[:column] == column }.each do |id, card| %>
           <div class="card mt-2" tabindex="-1">
             <div class="card-content">
+              <div class="columns">
+                <div class="column is-narrow has-text-centered">
 
-              <div class="content">
-                <% if card[:votes].count > 0 %>
-                  <%=h card[:votes].count %> 👍
-                <% end %>
+                  <% if votes > 0 %>
+                    <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
+                      <button type="submit" class="button is-white is-outlined is-small"> 👍 </button>
+                    </form>
+                  <% end %>
 
-                <%=h card[:message] %>
-                <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
+                  <%=h card[:votes].count if card[:votes].count > 0 %>
+
+                  <% if card[:votes].include?(userid) %>
+                    <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
+                      <input type="hidden" name="_method" value="DELETE" />
+                      <button type="submit" class="button is-outlined is-small is-white"> 👎 </button>
+                    </form>
+                  <% end %>
+
+                </div>
+                <div class="column">
+                  <%=h card[:message] %>
+                  <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
+                </div>
               </div>
 
-              <div class="content">
-
-                <% if votes > 0 %>
-                  <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
-                    <button type="submit" class="button is-success is-outlined"> 👍 </button>
-                  </form>
-                <% end %>
-
-                <% if card[:votes].include?(userid) %>
-                  <form class="is-inline" method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
-                    <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit" class="button is-danger is-outlined"> 👎 </button>
-                  </form>
-                <% end %>
-
+              <div class="content has-text-right">
                 <% if card[:userid] == userid  %>
+                  <a class="button is-link is-outlined is-small" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit"> Edit ✏️ </a>
                   <form class="is-inline" method="post" action="/boards/<%= board[:id] %>/cards/<%= id %>">
                     <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit" class="button is-danger is-outlined"> Delete ❌ </button>
+                    <button type="submit" class="button is-danger is-outlined is-small"> Delete ❌ </button>
                   </form>
-
-                  <a class="button is-link is-outlined" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit"> Edit ✏️ </a>
                 <% end %>
               </div>
 
