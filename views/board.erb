@@ -3,29 +3,28 @@
   <div class="columns">
     <div class="column">
       <h1 class="title">RETRO: <%=h board[:name] %></h1>
+
+      <% if theme == "light" %>
+        <a href="/mode/dark"> 🌙 Dark mode</a>
+      <% else %>
+        <a href="/mode/light"> ☀️ Light mode</a>
+      <% end %>
+
+      | <a href="/boards/<%= board[:id] %>/edit">✏️ Edit</a>
+      | 📥 Export: <a href="/boards/<%= board[:id] %>/export/markdown">Markdown</a>
+      | <%= votes %> Remaining vote(s) for you.
+
     </div>
     <div class="column">
       <iframe frameborder="0" src="/boards/<%= board[:id] %>/countdown" style="width: 100%; height: 3rem"></iframe>
     </div>
   </div>
 
-  <p class="content">
-    <% if theme == "light" %>
-      <a class="has-text-black" href="/mode/dark"> 🌙 Dark mode</a>
-    <% else %>
-      <a class="has-text-white" href="/mode/light"> ☀️ Light mode</a>
-    <% end %>
-
-    | <a href="/boards/<%= board[:id] %>/edit">Edit</a>
-    | Export:
-    <a href="/boards/<%= board[:id] %>/export/markdown">Markdown</a>
-    <small class="has-text-grey-light">| <%= votes %> Remaining vote(s) for you.</small>
-  </p>
 
   <div class="columns">
     <% board[:columns].each do |column| %>
       <div class="column">
-        <h2 class="title is-5"><%=h column %></h2>
+        <h2 class="title is-5 is-capitalized"><%=h column %></h2>
 
         <% board[:cards].select { |_, card| card[:column] == column }.each do |id, card| %>
           <div class="card mt-2" tabindex="-1">
