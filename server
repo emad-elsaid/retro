@@ -109,6 +109,41 @@ get '/boards/:board/cards/:card/edit' do
   erb :card, locals: { board: board, card: card, id: params[:card] }
 end
 
+get '/boards/:board/cards/:card/merge' do
+  userid = ensure_user
+  board = ensure_board(boards)
+  card = board[:cards][params[:card]]
+
+  redirect "/boards/#{board[:id]}" unless board[:userid] == userid
+  redirect("/boards/#{board[:id]}") unless card
+  other_cards = board[:cards].select do |id, board_card| 
+    board_card[:column] == card[:column] && id != params[:card]
+  end
+
+  erb :merge, locals: {
+    board: board,
+    card_id: params[:card],
+    card: card,
+    other_cards: other_cards
+  }
+end
+
+get '/boards/:board/cards/:card/merge/:other_card' do
+  userid = ensure_user
+  board = ensure_board(boards)
+  card = board[:cards][params[:card]]
+  other_card = board[:cards][params[:other_card]]
+
+  redirect "/boards/#{board[:id]}" unless board[:userid] == userid
+  redirect("/boards/#{board[:id]}") unless card
+  redirect("/boards/#{board[:id]}") unless other_card
+
+  card[:message] = "#{card[:message]} | #{other_card[:message]}"
+  board[:cards].delete(params[:other_card])
+
+  redirect "/boards/#{board[:id]}"
+end
+
 post '/boards/:board/cards/:card' do
   userid = ensure_user
   board = ensure_board(boards)
@@ -167,3 +202,4 @@ get '/boards/:board/countdown' do
   headers['refresh'] = '5'
   erb :countdown, locals: { board: board, remaining: remaining, userid: userid }
 end
+

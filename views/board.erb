@@ -54,15 +54,18 @@
                 </div>
               </div>
 
-              <% if card[:userid] == userid  %>
-                <div class="content has-text-right">
+              <div class="content has-text-right">
+                <% if card[:userid] == userid  %>
                   <a class="button is-link is-outlined is-small" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit"> Edit ✏️ </a>
                   <form class="is-inline" method="post" action="/boards/<%= board[:id] %>/cards/<%= id %>">
                     <input type="hidden" name="_method" value="DELETE" />
                     <button type="submit" class="button is-danger is-outlined is-small"> Delete ❌ </button>
                   </form>
-                </div>
-              <% end %>
+                <% end %>
+                <% if board[:userid] == userid  %>
+                  <a class="button is-info is-outlined is-small" href="/boards/<%= board[:id] %>/cards/<%= id %>/merge"> Merge </a>
+                <% end %>
+              </div>
 
             </div>
           </div>

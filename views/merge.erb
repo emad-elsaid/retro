@@ -1,0 +1,26 @@
+<section class="section">
+  <div class="container">
+    <h1 class="title">Merge Card</h1>
+    <div class="card mt-2">
+      <div class="card-content">
+        <div class="content">
+          <%=h card[:message] %>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <p class="subtitle">Select below the card you would like to merge the card above with</p>
+    <% other_cards.each do |id, other_card| %>
+      <div class="card mt-2">
+        <div class="card-content">
+          <div class="content">
+            <%=h other_card[:message] %>
+          </div>
+          <a class="button is-info is-outlined" href="/boards/<%= board[:id] %>/cards/<%= card_id %>/merge/<%= id %>">
+            <span>Merge</span>
+          </a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
