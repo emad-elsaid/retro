@@ -109,35 +109,37 @@ get '/boards/:board/cards/:card/edit' do
   erb :card, locals: { board: board, card: card, id: params[:card] }
 end
 
-get '/boards/:board/cards/:primary_card_id/merge' do
+get '/boards/:board/cards/:card/merge' do
   userid = ensure_user
   board = ensure_board(boards)
-  primary_card = board[:cards][params[:primary_card_id]]
+  card = board[:cards][params[:card]]
 
-  redirect("/boards/#{board[:id]}") unless primary_card
-  secondary_cards = board[:cards].select do |id, card| 
-    card[:column] == primary_card[:column] && id != params[:primary_card_id]
+  redirect "/boards/#{board[:id]}" unless board[:userid] == userid
+  redirect("/boards/#{board[:id]}") unless card
+  other_cards = board[:cards].select do |id, board_card| 
+    board_card[:column] == card[:column] && id != params[:card]
   end
 
   erb :merge, locals: {
     board: board,
-    primary_card_id: params[:primary_card_id],
-    primary_card: primary_card,
-    secondary_cards: secondary_cards
+    card_id: params[:card],
+    card: card,
+    other_cards: other_cards
   }
 end
 
-get '/boards/:board/cards/:primary_card_id/merge/:secondary_card_id' do
+get '/boards/:board/cards/:card/merge/:other_card' do
   userid = ensure_user
   board = ensure_board(boards)
-  primary_card = board[:cards][params[:primary_card_id]]
-  secondary_card = board[:cards][params[:secondary_card_id]]
+  card = board[:cards][params[:card]]
+  other_card = board[:cards][params[:other_card]]
 
-  redirect("/boards/#{board[:id]}") unless primary_card
-  redirect("/boards/#{board[:id]}") unless secondary_card
+  redirect "/boards/#{board[:id]}" unless board[:userid] == userid
+  redirect("/boards/#{board[:id]}") unless card
+  redirect("/boards/#{board[:id]}") unless other_card
 
-  primary_card[:message] = "#{primary_card[:message]} | #{secondary_card[:message]}"
-  board[:cards].delete(params[:secondary_card_id])
+  card[:message] = "#{card[:message]} | #{other_card[:message]}"
+  board[:cards].delete(params[:other_card])
 
   redirect "/boards/#{board[:id]}"
 end

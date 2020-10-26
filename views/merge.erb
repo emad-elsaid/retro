@@ -4,19 +4,19 @@
     <div class="card mt-2">
       <div class="card-content">
         <div class="content">
-          <%=h primary_card[:message] %>
+          <%=h card[:message] %>
         </div>
       </div>
     </div>
     <hr />
     <p class="subtitle">Select below the card you would like to merge the card above with</p>
-    <% secondary_cards.each do |id, secondary_card| %>
+    <% other_cards.each do |id, other_card| %>
       <div class="card mt-2">
         <div class="card-content">
           <div class="content">
-            <%=h secondary_card[:message] %>
+            <%=h other_card[:message] %>
           </div>
-          <a class="button is-info is-outlined" href="/boards/<%= board[:id] %>/cards/<%= primary_card_id %>/merge/<%= id %>">
+          <a class="button is-info is-outlined" href="/boards/<%= board[:id] %>/cards/<%= card_id %>/merge/<%= id %>">
             <span>Merge</span>
           </a>
         </div>
