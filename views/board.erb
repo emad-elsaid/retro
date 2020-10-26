@@ -59,10 +59,24 @@
                   <a class="button is-link is-outlined is-small" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit"> Edit ✏️ </a>
                   <form class="is-inline" method="post" action="/boards/<%= board[:id] %>/cards/<%= id %>">
                     <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit" class="button is-danger is-outlined is-small"> Delete ❌ </button>
+                    <button type="submit" class="button is-danger is-outlined">
+                      <span class="icon">
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </button>
                   </form>
-                </div>
-              <% end %>
+
+                  <a class="button is-link is-outlined" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit">
+                    <span class="icon">
+                      <i class="fas fa-pen"></i>
+                    </span>
+                  </a>
+
+                  <a class="button is-info is-outlined" href="/boards/<%= board[:id] %>/cards/<%= id %>/merge">
+                    <span>Merge</span>
+                  </a>
+                <% end %>
+              </div>
 
             </div>
           </div>
