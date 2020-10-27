@@ -104,7 +104,7 @@ get '/boards/:board/cards/:card/edit' do
   board = ensure_board(boards)
   card = board[:cards][params[:card]]
 
-  redirect("/boards/#{board[:id]}") unless card || card[:userid] == userid
+  redirect "/boards/#{board[:id]}" unless card || card[:userid] == userid
 
   erb :card, locals: { board: board, card: card, id: params[:card] }
 end
@@ -148,7 +148,7 @@ post '/boards/:board/cards/:card' do
   userid = ensure_user
   board = ensure_board(boards)
   card = board[:cards][params[:card]]
-  redirect("/boards/#{board[:id]}") unless card || card[:userid] == userid
+  redirect "/boards/#{board[:id]}" unless card || card[:userid] == userid
 
   card.merge!(params.slice(:column, :message))
 
