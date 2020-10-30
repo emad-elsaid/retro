@@ -61,6 +61,7 @@ post '/boards' do
   board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
   board[:allowed_votes] = board[:allowed_votes].to_i
   board[:countdown] = Time.now + board[:countdown].to_i * 60
+  board[:hide_cards] = params.key?(:hide_cards)
 
   boards[id] = board
 
@@ -84,6 +85,7 @@ post '/boards/:board' do
   board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
   board[:allowed_votes] = board[:allowed_votes].to_i
   board[:countdown] = Time.now + board[:countdown].to_i * 60
+  board[:hide_cards] = params.key?(:hide_cards)
 
   redirect "boards/#{board[:id]}"
 end
