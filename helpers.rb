@@ -17,7 +17,10 @@ helpers do
   end
 
   def ensure_user
-    redirect '/username' unless cookies[:userid]
+    unless cookies[:userid]
+      cookies[:back] = request.path_info
+      redirect '/username'
+    end
     cookies[:userid]
   end
 

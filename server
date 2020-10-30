@@ -33,14 +33,14 @@ get '/mode/:mode' do
 end
 
 get '/username' do
-  erb :username, locals: { back: request.referer }
+  erb :username
 end
 
 post '/username' do
   cookies[:username] = params[:username]
   cookies[:userid] = SecureRandom.uuid unless cookies.key?(:userid)
 
-  redirect params[:back]
+  redirect cookies[:back] || '/'
 end
 
 get '/boards/:board' do
