@@ -62,6 +62,7 @@ post '/boards' do
   board[:allowed_votes] = board[:allowed_votes].to_i
   board[:countdown] = Time.now + board[:countdown].to_i * 60
   board[:hide_cards] = params.key?(:hide_cards)
+  board[:hide_users] = params.key?(:hide_users)
 
   boards[id] = board
 
@@ -86,6 +87,7 @@ post '/boards/:board' do
   board[:allowed_votes] = board[:allowed_votes].to_i
   board[:countdown] = Time.now + board[:countdown].to_i * 60
   board[:hide_cards] = params.key?(:hide_cards)
+  board[:hide_users] = params.key?(:hide_users)
 
   redirect "boards/#{board[:id]}"
 end

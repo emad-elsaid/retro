@@ -54,7 +54,10 @@
                   <% else %>
                     <%=h card[:message] %>
                   <% end %>
-                  <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
+
+                  <% unless board[:hide_users] %>
+                    <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
+                  <% end %>
                 </div>
               </div>
 
