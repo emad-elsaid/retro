@@ -4,7 +4,7 @@
     <div class="card mt-2">
       <div class="card-content">
         <div class="content">
-          <%=h card[:message] %>
+          <%=simple_format card[:message] %>
         </div>
       </div>
     </div>
@@ -14,7 +14,7 @@
       <div class="card mt-2">
         <div class="card-content">
           <div class="content">
-            <%=h other_card[:message] %>
+            <%=simple_format other_card[:message] %>
           </div>
           <a class="button is-info is-outlined" href="/boards/<%= board[:id] %>/cards/<%= card_id %>/merge/<%= id %>">
             <span>Merge</span>

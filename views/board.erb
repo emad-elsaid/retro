@@ -50,9 +50,9 @@
                 </div>
                 <div class="column">
                   <% if board[:hide_cards] && card[:userid] != userid %>
-                    <span style="filter: blur(0.25rem);"> <%=h card[:message].gsub(/[[:alpha:]]/, '*') %> </span>
+                    <span style="filter: blur(0.25rem);"> <%=simple_format card[:message].gsub(/[[:alpha:]]/, '*') %> </span>
                   <% else %>
-                    <%=h card[:message] %>
+                    <%=simple_format card[:message] %>
                   <% end %>
 
                   <% unless board[:hide_users] %>

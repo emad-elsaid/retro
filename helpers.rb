@@ -7,6 +7,10 @@ helpers do
     Rack::Utils.escape_html(text)
   end
 
+  def simple_format(text)
+    h(text).gsub('|', '<br>')
+  end
+
   def theme
     cookies[:theme] || 'light'
   end
