@@ -10,7 +10,10 @@
         <a href="/mode/light"> ☀️ Light mode</a>
       <% end %>
 
-      | <a href="/boards/<%= board[:id] %>/edit">✏️ Edit</a>
+      <% if board[:userid]==userid %>
+        | <a href="/boards/<%= board[:id] %>/edit">✏️ Edit</a>
+      <% end %>
+
       | 📥 Export: <a href="/boards/<%= board[:id] %>/export/markdown">Markdown</a>
       | <%= votes %> Remaining vote(s) for you.
 
