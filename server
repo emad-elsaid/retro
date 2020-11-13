@@ -20,7 +20,8 @@ get '/' do
   defaults = {
     name: '',
     allowed_votes: 3,
-    columns: ['Start', 'Stop', 'Continue', 'Action Points']
+    columns: ['Start', 'Stop', 'Continue', 'Action Points'],
+    order: 'votes'
   }
 
   erb :index, locals: { board: defaults }
@@ -57,7 +58,7 @@ end
 post '/boards' do
   userid = ensure_user
   id = SecureRandom.uuid
-  board = params.slice(:name, :columns, :allowed_votes, :countdown).merge(id: id, userid: userid, cards: {})
+  board = params.slice(:name, :columns, :allowed_votes, :countdown, :order).merge(id: id, userid: userid, cards: {})
   board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
   board[:allowed_votes] = board[:allowed_votes].to_i
   board[:countdown] = Time.now + board[:countdown].to_i * 60
@@ -82,7 +83,7 @@ post '/boards/:board' do
   board = ensure_board(boards)
   redirect "/boards/#{board[:id]}" unless board[:userid] == userid
 
-  board.merge!(params.slice(:name, :columns, :allowed_votes, :countdown))
+  board.merge!(params.slice(:name, :columns, :allowed_votes, :countdown, :order))
   board[:columns] = board[:columns].lines.map(&:strip).reject(&:empty?)
   board[:allowed_votes] = board[:allowed_votes].to_i
   board[:countdown] = Time.now + board[:countdown].to_i * 60

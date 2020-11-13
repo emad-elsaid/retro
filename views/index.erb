@@ -36,6 +36,17 @@
         </div>
       </div>
 
+      <div class="field">
+        <label class="label" for="order">Order of cards</label>
+        <div class="select">
+          <select name="order" id="order">
+            <option value="creation" <%='selected' if board[:order] == 'creation' %>>Order of creation</option>
+            <option value="votes" <%='selected' if board[:order] == 'votes' %>>Most voted</option>
+          </select>
+        </div>
+      </div>
+
+
       <div class="field is-fullwidth">
         <label class="label" for="columns">Hide cards</label>
         <label class="checkbox" for="hide_cards">
