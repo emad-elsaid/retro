@@ -29,6 +29,19 @@
       <div class="column">
         <h2 class="title is-5 is-capitalized"><%=h column %></h2>
 
+        <form action="/boards/<%= board[:id] %>/cards" method="POST" class="mt-5">
+          <input type="hidden" name="column" value="<%= column %>" />
+
+          <div class="field has-addons is-fullwidth mt-2">
+            <div class="control is-expanded">
+              <input type="text" class="input" placeholder="What's on your mind?..." name="message" id="message" />
+            </div>
+            <div class="control">
+              <button class="button" type="submit"> 📢 </button>
+            </div>
+          </div>
+        </form>
+
         <% board[:cards]
         .select { |_, card| card[:column] == column }
         .sort_by {|_, c| board[:order] == 'votes' ? c[:votes].count*-1 : 1 }
@@ -84,19 +97,6 @@
           </div>
 
         <% end %>
-
-        <form action="/boards/<%= board[:id] %>/cards" method="POST" class="mt-5">
-          <input type="hidden" name="column" value="<%= column %>" />
-
-          <div class="field has-addons is-fullwidth mt-2">
-            <div class="control is-expanded">
-              <input type="text" class="input" placeholder="What's on your mind?..." name="message" id="message" />
-            </div>
-            <div class="control">
-              <button class="button" type="submit"> 📢 </button>
-            </div>
-          </div>
-        </form>
 
       </div>
     <% end %>
