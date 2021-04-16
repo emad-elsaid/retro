@@ -11,9 +11,6 @@ disable :strict_paths
 
 boards = {}
 
-before do
-end
-
 get '/' do
   ensure_user
 
