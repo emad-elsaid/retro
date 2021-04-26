@@ -191,6 +191,7 @@ end
 
 get '/boards/:board/export/markdown' do
   board = ensure_board(boards)
+  return "Can't export while cards are hidden" if board[:hide_cards]
 
   content_type 'text/markdown'
   erb :markdown, layout: false, locals: { board: board }
