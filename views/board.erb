@@ -44,11 +44,11 @@
 
         <% board[:cards]
         .select { |_, card| card[:column] == column }
-        .sort_by {|_, c| board[:order] == 'votes' ? c[:votes].count*-1 : 1 }
+        .sort_by {|_, c| !board[:hide_votes] && board[:order] == 'votes' ? c[:votes].count*-1 : 1 }
         .each do |id, card| %>
           <div class="card mt-2" tabindex="-1">
             <div class="card-content">
-              <div class="columns is-gapless">
+              <div class="columns">
                 <div class="column is-narrow has-text-centered">
 
                   <% if votes > 0 %>
@@ -57,7 +57,12 @@
                     </form>
                   <% end %>
 
-                  <%=h card[:votes].count if card[:votes].count > 0 %>
+                  <% card_votes = board[:hide_votes] ? card[:votes].select{ |v| v == userid }.count : card[:votes].count  %>
+                  <% if card_votes > 0 %>
+                    <div class="tag">
+                      <%=h card_votes %>
+                    </div>
+                  <% end %>
 
                   <% if card[:votes].include?(userid) %>
                     <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">

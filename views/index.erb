@@ -17,6 +17,14 @@
         </div>
       </div>
 
+      <div class="field is-fullwidth">
+        <label class="label" for="columns">Hide votes numbers</label>
+        <label class="checkbox" for="hide_votes">
+          <input type="checkbox" name="hide_votes" id="hide_votes" <%= 'checked' if board[:hide_votes] %>> Hide votes numbers to reduce bias while casting votes
+        </label>
+      </div>
+
+
       <div class="field">
         <label class="label" for="countdown">Count down</label>
         <div class="field has-addons is-fullwidth">
