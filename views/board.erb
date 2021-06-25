@@ -53,13 +53,13 @@
 
                   <% if votes > 0 %>
                     <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
-                      <button type="submit" class="button is-white is-outlined is-small"> 👍 </button>
+                      <button type="submit" class="button is-small <%= theme=='light'? 'is-white' : 'is-dark' %>"> 👍 </button>
                     </form>
                   <% end %>
 
                   <% card_votes = board[:hide_votes] ? card[:votes].select{ |v| v == userid }.count : card[:votes].count  %>
                   <% if card_votes > 0 %>
-                    <div class="tag">
+                    <div class="tag my-1 <%= 'is-dark' if theme == "dark" %>">
                       <%=h card_votes %>
                     </div>
                   <% end %>
@@ -67,7 +67,7 @@
                   <% if card[:votes].include?(userid) %>
                     <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
                       <input type="hidden" name="_method" value="DELETE" />
-                      <button type="submit" class="button is-outlined is-small is-white"> 👎 </button>
+                      <button type="submit" class="button is-small <%= theme=='light'? 'is-white' : 'is-dark' %>"> 👎 </button>
                     </form>
                   <% end %>
 
