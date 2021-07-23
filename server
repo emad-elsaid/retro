@@ -120,15 +120,11 @@ get '/boards/:board/cards/:card/merge' do
 
   redirect "/boards/#{board[:id]}" unless board[:userid] == userid
   redirect "/boards/#{board[:id]}" unless card
-  other_cards = board[:cards].select do |id, board_card|
-    board_card[:column] == card[:column] && id != params[:card]
-  end
 
   erb :merge, locals: {
     board: board,
     card_id: params[:card],
-    card: card,
-    other_cards: other_cards
+    card: card
   }
 end
 
@@ -142,8 +138,8 @@ get '/boards/:board/cards/:card/merge/:other_card' do
   redirect "/boards/#{board[:id]}" unless card
   redirect "/boards/#{board[:id]}" unless other_card
 
-  card[:message] = "#{card[:message]} | #{other_card[:message]}"
-  board[:cards].delete(params[:other_card])
+  other_card[:message] = "#{other_card[:message]} | #{card[:message]}"
+  board[:cards].delete(params[:card])
 
   redirect "/boards/#{board[:id]}"
 end
