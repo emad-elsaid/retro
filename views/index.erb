@@ -10,20 +10,12 @@
         </div>
       </div>
 
-      <div class="field is-fullwidth">
-        <label class="label" for="allowed_votes">Allowed votes</label>
-        <div class="control is-expanded">
-          <input class="input" type="number" name="allowed_votes" id="allowed_votes" value="<%=h board[:allowed_votes] %>" />
+      <div class="field">
+        <label class="label" for="columns">Columns</label>
+        <div class="control">
+          <textarea class="textarea" placeholder="Each line a column..." name="columns" id="columns"><%=h board[:columns].join("\n") %></textarea>
         </div>
       </div>
-
-      <div class="field is-fullwidth">
-        <label class="label" for="columns">Hide votes numbers</label>
-        <label class="checkbox" for="hide_votes">
-          <input type="checkbox" name="hide_votes" id="hide_votes" <%= 'checked' if board[:hide_votes] %>> Hide votes numbers to reduce bias while casting votes
-        </label>
-      </div>
-
 
       <div class="field">
         <label class="label" for="countdown">Count down</label>
@@ -38,15 +30,9 @@
       </div>
 
       <div class="field">
-        <label class="label" for="columns">Columns</label>
-        <div class="control">
-          <textarea class="textarea" placeholder="Each line a column..." name="columns" id="columns"><%=h board[:columns].join("\n") %></textarea>
-        </div>
-      </div>
-
-      <div class="field">
         <label class="label" for="order">Order of cards</label>
-        <div class="select">
+
+        <div class="select is-fullwidth">
           <select name="order" id="order">
             <option value="creation" <%='selected' if board[:order] == 'creation' %>>Order of creation</option>
             <option value="votes" <%='selected' if board[:order] == 'votes' %>>Most voted</option>
@@ -54,6 +40,19 @@
         </div>
       </div>
 
+      <div class="field is-fullwidth">
+        <label class="label" for="allowed_votes">Allowed votes</label>
+        <div class="control is-expanded">
+          <input class="input" type="number" name="allowed_votes" id="allowed_votes" value="<%=h board[:allowed_votes] %>" />
+        </div>
+      </div>
+
+      <div class="field is-fullwidth">
+        <label class="label" for="columns">Hide votes numbers</label>
+        <label class="checkbox" for="hide_votes">
+          <input type="checkbox" name="hide_votes" id="hide_votes" <%= 'checked' if board[:hide_votes] %>> Hide votes numbers to reduce bias while casting votes
+        </label>
+      </div>
 
       <div class="field is-fullwidth">
         <label class="label" for="columns">Hide cards</label>
@@ -71,7 +70,9 @@
 
       <div class="field">
         <div class="control">
-          <button class="button is-link" type="submit">Create</button>
+          <button class="button is-link" type="submit">
+            <%= board[:id].nil? ? 'Create' : 'Update' %>
+          </button>
         </div>
       </div>
 

@@ -16,9 +16,11 @@ get '/' do
 
   defaults = {
     name: '',
-    allowed_votes: 3,
-    columns: ['Start', 'Stop', 'Continue', 'Action Points'],
-    order: 'votes'
+    allowed_votes: 0,
+    columns: ['Start', 'Stop', 'Continue', 'Kudos', 'Action Points'],
+    order: 'votes',
+    hide_votes: true,
+    hide_cards: true
   }
 
   erb :index, locals: { board: defaults }
@@ -97,8 +99,8 @@ post '/boards/:board/cards' do
   board = ensure_board(boards)
 
   board[:cards][SecureRandom.uuid] = params
-                   .slice(:column, :message)
-                   .merge(username: cookies[:username], userid: userid, votes: [])
+                                     .slice(:column, :message)
+                                     .merge(username: cookies[:username], userid: userid, votes: [])
 
   redirect "/boards/#{board[:id]}"
 end

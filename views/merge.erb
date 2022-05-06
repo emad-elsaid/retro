@@ -26,7 +26,7 @@
         .sort_by {|_, c| !board[:hide_votes] && board[:order] == 'votes' ? c[:votes].count*-1 : 1 }
         .each do |id, other_card| %>
           <div class="card mt-2" tabindex="-1">
-            <div class="card-content">
+            <div class="card-content p-3">
               <div class="columns">
                 <div class="column">
                     <%=simple_format other_card[:message] %>
@@ -34,7 +34,7 @@
               </div>
 
               <div class="content has-text-right">
-                <a class="button is-info is-outlined" href="/boards/<%= board[:id] %>/cards/<%= card_id %>/merge/<%= id %>">
+                <a class="button is-light is-info is-small" href="/boards/<%= board[:id] %>/cards/<%= card_id %>/merge/<%= id %>">
                   <span>Merge</span>
                 </a>
               </div>
