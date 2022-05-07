@@ -8,7 +8,7 @@ helpers do
   end
 
   def simple_format(text)
-    h(text).gsub('|', '<br>')
+    h(text).gsub('|', '<br> <span class="has-text-grey-light"> ---  </span> <br>')
   end
 
   def theme

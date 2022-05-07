@@ -1,21 +1,33 @@
-<section class="section">
+<section class="section p-5">
 
   <div class="columns">
     <div class="column">
-      <h1 class="title">RETRO: <%=h board[:name] %></h1>
+       <h1 class="title bb-1">RETRO: <%=h board[:name] %></h1>
 
-      <% if theme == "light" %>
-        <a href="/mode/dark"> 🌙 Dark mode</a>
-      <% else %>
-        <a href="/mode/light"> ☀️ Light mode</a>
-      <% end %>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li>
+              <% if theme == "light" %>
+                <a href="/mode/dark"> 🌙 &nbsp; Dark mode</a>
+              <% else %>
+                <a href="/mode/light"> ☀️ &nbsp; Light mode</a>
+              <% end %>
+            </li>
 
-      <% if board[:userid]==userid %>
-        | <a href="/boards/<%= board[:id] %>/edit">✏️ Edit</a>
-      <% end %>
+            <% if board[:userid]==userid %>
+              <li>
+                <a href="/boards/<%= board[:id] %>/edit">✏️ &nbsp;Edit </a>
+              </li>
+             <% end %>
 
-      | 📥 Export: <a href="/boards/<%= board[:id] %>/export/markdown">Markdown</a>
-      | <%= votes %> Remaining vote(s) for you.
+            <li>
+              <a href="/boards/<%= board[:id] %>/export/markdown"> 📥  &nbsp; Export markdown</a>
+            </li>
+            <li>
+              &nbsp; <%= votes %> &nbsp; Remaining vote(s) for you.
+            </li>
+          </ul>
+        </nav>
 
     </div>
     <div class="column">
@@ -26,7 +38,7 @@
 
   <div class="columns">
     <% board[:columns].each do |column| %>
-      <div class="column">
+      <div class="column card m-2 <%= theme=='light' ? 'has-background-light' : 'has-background-black' %>">
         <h2 class="title is-5 is-capitalized"><%=h column %></h2>
 
         <form action="/boards/<%= board[:id] %>/cards" method="POST" class="mt-5">
@@ -34,10 +46,10 @@
 
           <div class="field has-addons is-fullwidth mt-2">
             <div class="control is-expanded">
-              <input type="text" class="input" placeholder="What's on your mind?..." name="message" id="message" />
+              <input type="text" class="input" placeholder="What's on your mind?..." name="message" id="message" autocomplete="off" />
             </div>
             <div class="control">
-              <button class="button" type="submit"> 📢 </button>
+              <button class="button" type="submit"> 💬 </button>
             </div>
           </div>
         </form>
@@ -46,63 +58,87 @@
         .select { |_, card| card[:column] == column }
         .sort_by {|_, c| !board[:hide_votes] && board[:order] == 'votes' ? c[:votes].count*-1 : 1 }
         .each do |id, card| %>
-          <div class="card mt-2" tabindex="-1">
-            <div class="card-content">
-              <div class="columns">
-                <div class="column is-narrow has-text-centered">
 
-                  <% if votes > 0 %>
-                    <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
-                      <button type="submit" class="button is-small <%= theme=='light'? 'is-white' : 'is-dark' %>"> 👍 </button>
-                    </form>
-                  <% end %>
+            <div class="card mt-2" tabindex="-1">
+              <div class="card-content p-3" style="position: relative;">
 
-                  <% card_votes = board[:hide_votes] ? card[:votes].select{ |v| v == userid }.count : card[:votes].count  %>
-                  <% if card_votes > 0 %>
-                    <div class="tag my-1 <%= 'is-dark' if theme == "dark" %>">
-                      <%=h card_votes %>
+                <!-- votes -->
+                <div class="mb-1" style="position: absolute; top: 10px; right: 10px;">
+                   <% if board[:allowed_votes]  > 0 %>
+                    <div class="tags has-addons">
+
+                        <!-- up -->
+                        <% if votes > 0 && board[:hide_votes] %>
+                          <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
+                            <button type="submit" class="button is-size-7 tag <%= theme=='light' ? 'is-white' : 'is-black' %>"> 👍 </button>
+                          </form>
+                        <% end %>
+
+                        <!-- votes count -->
+                        <% card_votes = board[:hide_votes] ? card[:votes].select{ |v| v == userid }.count : card[:votes].count  %>
+                        <% if card_votes > 0 %>
+                          <span class="tag is-size-7 has-text-weight-medium is-warning <%= theme=='light' ? 'is-light' : 'is-dark' %>">
+                            <%=h card_votes %>
+                          </span>
+                        <% else %>
+                          <span class="tag<%= theme=='light' ? 'is-white' : 'is-dark' %>"> &nbsp; </span>
+                        <% end %>
+
+                        <!-- down -->
+                        <% if card[:votes].include?(userid) && board[:hide_votes] %>
+                          <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
+                            <input type="hidden" name="_method" value="DELETE" />
+                            <button type="submit" class="button is-size-7 tag <%= theme=='light' ? 'is-white' : 'is-black' %>"> 👎 </button>
+                          </form>
+                        <% end %>
+
+
                     </div>
                   <% end %>
-
-                  <% if card[:votes].include?(userid) %>
-                    <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
-                      <input type="hidden" name="_method" value="DELETE" />
-                      <button type="submit" class="button is-small <%= theme=='light'? 'is-white' : 'is-dark' %>"> 👎 </button>
-                    </form>
-                  <% end %>
-
                 </div>
-                <div class="column">
-                  <% if board[:hide_cards] && card[:userid] != userid %>
-                    <span style="filter: blur(0.25rem);"> <%=simple_format card[:message].gsub(/[[:alpha:]]/, '*') %> </span>
-                  <% else %>
-                    <%=simple_format card[:message] %>
-                  <% end %>
+                <!-- votes -->
+
+                <!-- card text -->
+                <div class="column is-full has-text-left p-2 mt-4">
+                  <div class="mb-1">
+                    <% if board[:hide_cards] && card[:userid] != userid %>
+                        <span style="filter: blur(0.25rem);"> <%=simple_format card[:message].gsub(/[[:alpha:]]/, '*') %> </span>
+                      <% else %>
+                        <%=simple_format card[:message] %>
+                    <% end %>
+                  </div>
 
                   <% unless board[:hide_users] %>
-                    <small class="has-text-grey-light"> -- <%=h card[:username] %></small>
+                    <small class="has-text-grey-light is-small mt-2"> - <%=h card[:username] %></small>
                   <% end %>
                 </div>
-              </div>
+                <!-- card text -->
 
-              <div class="content has-text-right">
-                <% if card[:userid] == userid  %>
-                  <a class="button is-link is-outlined is-small" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit"> Edit ✏️ </a>
-                  <form class="is-inline" method="post" action="/boards/<%= board[:id] %>/cards/<%= id %>">
-                    <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit" class="button is-danger is-outlined is-small"> Delete ❌ </button>
-                  </form>
-                <% end %>
-                <% if board[:userid] == userid  %>
-                  <a class="button is-info is-outlined is-small" href="/boards/<%= board[:id] %>/cards/<%= id %>/merge"> Merge </a>
-                <% end %>
-              </div>
+                <!-- buttons-->
+                <div class="columns mt-4 is-gapless is-mobile has-text-centered">
+                    <% if card[:userid] == userid  %>
+                    <div class="column is-one-third has-text-right">
+                      <span class="has-text-centered">
+                        <a class="button is-light is-warning is-small" href="/boards/<%= board[:id] %>/cards/<%= id %>/edit"> &nbsp;Edit ✏️ &nbsp;</a>
+                      </span>
 
+                    </div>
+                    <div class="column is-one-third has-text-centered">
+                      <form class="is-inline" method="post" action="/boards/<%= board[:id] %>/cards/<%= id %>">
+                        <input type="hidden" name="_method" value="DELETE" />
+                        <button type="submit" class="button is-light is-danger is-small"> Delete ❌ </button>
+                      </form>
+                    </div>
+                  <%end%>
+                  <div class="column is-one-third has-text-left">
+                    <a class="button is-light is-info is-small" href="/boards/<%= board[:id] %>/cards/<%= id %>/merge"> Merge 🔁 </a>
+                  </div>
+                </div>
+                <!-- buttons-->
+              </div>
             </div>
-          </div>
 
-        <% end %>
-
+         <% end %>
       </div>
     <% end %>
   </div>

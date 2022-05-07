@@ -6,6 +6,7 @@ unzip -u bulma.zip
 
 cat << EOT > bulma_light.scss
 @charset "utf-8";
+\$size-7:	0.7rem;
 @import "bulma/bulma.sass";
 EOT
 
