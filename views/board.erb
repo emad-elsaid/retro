@@ -14,11 +14,11 @@
               <% end %>
             </li>
 
-            <li>
-              <% if board[:userid]==userid %>
+            <% if board[:userid]==userid %>
+              <li>
                 <a href="/boards/<%= board[:id] %>/edit">✏️ &nbsp;Edit </a>
-              <% end %>
-            </li>
+              </li>
+             <% end %>
 
             <li>
               <a href="/boards/<%= board[:id] %>/export/markdown"> 📥  &nbsp; Export markdown</a>
@@ -60,44 +60,46 @@
         .each do |id, card| %>
 
             <div class="card mt-2" tabindex="-1">
-              <div class="card-content p-3">
+              <div class="card-content p-3" style="position: relative;">
 
                 <!-- votes -->
-                <div class="columns is-gapless is-mobile is-full m-0 mb-2">
+                <div class="mb-1" style="position: absolute; top: 10px; right: 10px;">
+                   <% if board[:allowed_votes]  > 0 %>
+                    <div class="tags has-addons">
 
-                  <div class="column p-0 is-one-third has-text-right">
-                    <% if votes > 0 && board[:hide_votes] %>
-                      <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
-                        <button type="submit" class="button is-small <%= theme=='light' ? 'is-white' : 'is-dark' %>"> 👍 </button>
-                      </form>
-                    <% end %>
-                  </div>
+                        <!-- up -->
+                        <% if votes > 0 && board[:hide_votes] %>
+                          <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
+                            <button type="submit" class="button is-size-7 tag <%= theme=='light' ? 'is-white' : 'is-black' %>"> 👍 </button>
+                          </form>
+                        <% end %>
 
-                  <div class="column p-0 is-one-third has-text-centered">
-                    <% card_votes = board[:hide_votes] ? card[:votes].select{ |v| v == userid }.count : card[:votes].count  %>
+                        <!-- votes count -->
+                        <% card_votes = board[:hide_votes] ? card[:votes].select{ |v| v == userid }.count : card[:votes].count  %>
+                        <% if card_votes > 0 %>
+                          <span class="tag is-size-7 has-text-weight-medium is-warning <%= theme=='light' ? 'is-light' : 'is-dark' %>">
+                            <%=h card_votes %>
+                          </span>
+                        <% else %>
+                          <span class="tag<%= theme=='light' ? 'is-white' : 'is-dark' %>"> &nbsp; </span>
+                        <% end %>
 
-                    <% if card_votes > 0 %>
-                      <div class="tag is-warning <%= theme=='light' ? 'is-light' : 'is-dark' %>">
-                        <%=h card_votes %>
-                      </div>
-                    <% else %>
-                      <div class="tag <%= theme=='light' ? 'is-white' : 'is-dark' %>">&nbsp;</div>
-                    <% end %>
-                  </div>
+                        <!-- down -->
+                        <% if card[:votes].include?(userid) && board[:hide_votes] %>
+                          <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
+                            <input type="hidden" name="_method" value="DELETE" />
+                            <button type="submit" class="button is-size-7 tag <%= theme=='light' ? 'is-white' : 'is-black' %>"> 👎 </button>
+                          </form>
+                        <% end %>
 
-                  <div class="column p-0 is-one-third has-text-left">
-                    <% if card[:votes].include?(userid) && board[:hide_votes] %>
-                      <form method="POST" action="/boards/<%= board[:id] %>/cards/<%= id %>/vote">
-                        <input type="hidden" name="_method" value="DELETE" />
-                        <button type="submit" class="button is-small <%= theme=='light'? 'is-white' : 'is-dark' %>"> 👎 </button>
-                      </form>
-                    <% end %>
-                  </div>
 
+                    </div>
+                  <% end %>
                 </div>
-               <!-- votes -->
+                <!-- votes -->
 
-                <div class="column is-full has-text-left p-2">
+                <!-- card text -->
+                <div class="column is-full has-text-left p-2 mt-4">
                   <div class="mb-1">
                     <% if board[:hide_cards] && card[:userid] != userid %>
                         <span style="filter: blur(0.25rem);"> <%=simple_format card[:message].gsub(/[[:alpha:]]/, '*') %> </span>
@@ -110,6 +112,7 @@
                     <small class="has-text-grey-light is-small mt-2"> - <%=h card[:username] %></small>
                   <% end %>
                 </div>
+                <!-- card text -->
 
                 <!-- buttons-->
                 <div class="columns mt-4 is-gapless is-mobile has-text-centered">
@@ -133,12 +136,9 @@
                 </div>
                 <!-- buttons-->
               </div>
-             </div>
+            </div>
 
          <% end %>
-
-
-
       </div>
     <% end %>
   </div>
